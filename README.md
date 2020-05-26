@@ -17,6 +17,6 @@
 
 
 ## Using program language : C++14
-## Using compiler : Visual Studio 2019 ( Test )
+## Using compiler : Visual Studio 2019
 
 

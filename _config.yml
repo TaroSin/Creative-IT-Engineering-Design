@@ -1,34 +1,3 @@
-Skip to content
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@YEGRINA 
-Learn Git and GitHub without any code!
-Using the Hello World guide, you’ll start a branch, write comments, and open a pull request.
-
-
-YEGRINA
-/
-CHIsFun.github.io
-1
-00
- Code
- Issues 0
- Pull requests 0 Actions
- Projects 0
- Wiki
- Security 0
- Insights
- Settings
-CHIsFun.github.io/_config.yml
-@YEGRINA CHIsFun Create _config.yml
-78ed531 13 days ago
-281 lines (254 sloc)  7.98 KB
-  
 # Welcome to Jekyll!
 #
 # This config file is meant for settings that affect your entire site, values
@@ -52,7 +21,7 @@ title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "Your Name"
 description              : "An amazing website."
-url                      : "https://YEGRINA.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+url                      : "https://CHIsFun.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
@@ -310,15 +279,3 @@ defaults:
       comments: # true
       share: true
       related: true
-© 2020 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About

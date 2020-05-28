@@ -17,7 +17,7 @@
 ## Using compiler : Visual Studio 2019
 
 ------------------------------------------------
-#Subject : Calendar (with various functions)
-#Project rule
+# Subject : Calendar (with various functions)
+# Project rule
 
 

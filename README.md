@@ -13,10 +13,11 @@
 
 
 ------------------------------------------------
-# Project: 
-
-
 ## Using program language : C++14
 ## Using compiler : Visual Studio 2019
+
+------------------------------------------------
+#Subject : Calendar (with various functions)
+#Project rule
 
 

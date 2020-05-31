@@ -20,6 +20,10 @@
 -------------------------------------------------
 # Subject: Calendar
 
+<<<<<<< HEAD
 -------------------------------------------------
 # Website : funfun.github.io
+=======
+# Project Rule
+>>>>>>> upstream/master
 

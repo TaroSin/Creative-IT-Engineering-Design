@@ -24,7 +24,6 @@
 # Website : YEGRINA.github.io
 ------------------------------------------
 # Project Rule
-<<<<<<< HEAD
 =======
 ##### 추후 추가 예정
 
@@ -40,4 +39,3 @@
 ##### 이차 목표 : GUI를 사용하여 달력구현
 
 ## -홈페이지 : https://tarosin.github.io/Creative-IT-Engineering-Design/
->>>>>>> upstream/master

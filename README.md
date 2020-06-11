@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 창공재밌조(강성택,김보항,서예나,이민혁)
 
 ## 팀명 의미
@@ -6,6 +7,17 @@
 **재** 치있게 활용하여  
 **밌** 친 아이디어를 낼 수 있는  
 **조** !
+=======
+# Creative-IT-Engineering-Design
+Class on Creative IT Engineering Design-창공재밌조(강성택,김보항,서예나,이민혁)
+=======
+# Class on Creative IT Engineering Design
+## 창공재밌조(강성택,김보항,서예나,이민혁)
+
+
+
+-----------------------------------------------
+>>>>>>> 9ec2f6ff9c3fb0dd5f054c55cf486ca92efa7925
 
 아래는 창공재밌조 구성원들의 학번 이름입니다.
 
@@ -14,6 +26,7 @@
 | 강성택 | 김보항 | 서예나 | 이민혁 |
 
 
+<<<<<<< HEAD
 -------------------------------------------------
 
 # Project: Calendar
@@ -33,6 +46,19 @@
 ###### 참고 : 필요시 Release Branch와 Hotfix Branch 추가 예정
   
   
+=======
+------------------------------------------------
+
+## Using program language : C++14
+## Using compiler : Visual Studio 2019
+
+-------------------------------------------------
+# Subject: Calendar
+
+# Project Rule
+##### 추후 추가 예정
+
+>>>>>>> 9ec2f6ff9c3fb0dd5f054c55cf486ca92efa7925
 ### -기능
 ##### 1.윤년계산기능
 ##### 2.원하는 날짜를 입력하면 그에 해당하는 달력 페이지 출력
@@ -44,4 +70,8 @@
 ##### 일차 목표 : 콘솔 창에서 달력의 인터페이스 구성 및 알고리즘 구현
 ##### 이차 목표 : GUI를 사용하여 달력구현
 
+<<<<<<< HEAD
 ## -홈페이지 : https://tarosin.github.io/Creative-IT-Engineering-Design/
+=======
+## -홈페이지 : https://tarosin.github.io/Creative-IT-Engineering-Design/
+>>>>>>> 9ec2f6ff9c3fb0dd5f054c55cf486ca92efa7925

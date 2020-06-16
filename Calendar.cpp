@@ -9,7 +9,7 @@ int year, month, week;
 void input(); // 연도와 월을 입력받는 함수. 
 int getweek(int year, int month); 
 void Cal_leap(); // 윤년계산 
-void output_calendar(); // 달력  출 력  
+void output_calendar(); // 입력받은 연도와 월의 달력을 출력  
 
 int main(void)
 {

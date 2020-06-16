@@ -13,7 +13,6 @@ void output_calendar(); // 달력  출 력
 
 int main(void)
 {
-
 	input();
     week = getweek(year, month);    
     Cal_leap();

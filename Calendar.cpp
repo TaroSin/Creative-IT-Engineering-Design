@@ -32,6 +32,7 @@ int main(void)
     
     cout << "옵션 변호: "; 
     cin >> choice_num; 
+    
     if(choice_num == 7){
     	cout << endl;
     	input();
@@ -39,6 +40,7 @@ int main(void)
     	Cal_leap();
     	output_calendar();   	
 	}
+	else cout << "Error!" << endl;
 }
  
 void input(){

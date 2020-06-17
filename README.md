@@ -44,4 +44,4 @@
 ##### 일차 목표 : 콘솔 창에서 달력의 인터페이스 구성 및 알고리즘 구현
 ##### 이차 목표 : GUI를 사용하여 달력구현
 
-## -홈페이지 : https://tarosin.github.io/Creative-IT-Engineering-Design/
+## -홈페이지 : https://yegrina.github.io/

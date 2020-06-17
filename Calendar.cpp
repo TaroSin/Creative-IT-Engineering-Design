@@ -1,6 +1,6 @@
 #include <iostream>
 #include <ctime>
-
+#include <windows.h>
 using namespace std;
 
 int Month_days[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
@@ -10,6 +10,7 @@ void input(); // 연도와 월을 입력받는 함수.
 int getweek(int year, int month); 
 void Cal_leap(); // 윤년계산 
 void output_calendar(); // 입력받은 연도와 월의 달력을 출력  
+void textcolor(int foreground, int background); //색깔추가기능 
 
 int main()
 {
@@ -41,7 +42,10 @@ int main()
     	output_calendar();   	
 	}
 	else cout << "Error!" << endl;
-	
+	//테스트용도
+	textcolor(11, 0);
+	cout << "테스트용도 입니다" << endl;
+	textcolor(7, 0); 
 	return 0;
 }
  
@@ -81,4 +85,9 @@ void output_calendar(){
         week = (week + 1) % 7;
     }
     cout << endl;
+}
+
+void textcolor(int foreground, int background) { 
+int color=foreground+background*16; 
+SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color); 
 }

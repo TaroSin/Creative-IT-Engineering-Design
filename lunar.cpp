@@ -5,6 +5,14 @@ using namespace std;
 
 enum BOOL { FALSE = 0, TRUE = 1 };
 
+/*  아래의 음력 데이터 :
+
+    평달 -  작은 달 : 1
+            큰달    : 2
+    윤달이 있는 달 -  평달이 작고 윤달도 작으면 : 3
+                      평달이 작고 윤달이 크면   : 4
+                      평달이 크고 윤달이 작으면 : 5
+                      평달과 윤달이 모두 크면   : 6  */
 static const char _info_array[203][12] =
 {
     /* 1841 */
@@ -253,7 +261,34 @@ static const char _info_array[203][12] =
     1, 2, 1, 1, 2, 1,    1, 2, 2, 1, 2, 2,
 };
 
+typedef struct _lunar_info
+{
+    unsigned short lunar_year;         // 음력변환후년도(양력과다를수있음)
+    unsigned char lunar_month;              // 음력변환후달
+    unsigned char lunar_day;                // 음력변환후일
+    bool isyoondal;          // 윤달여부0:평달/1:윤달
+} lunar_t;
+
+static int _info_month[12] =
+{
+       31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+};
+
 BOOL SolarToLunar(lunar_t& lunar);
+
+static void febdays(int y)
+{
+    _info_month[1] = 28;
+
+    if (y % 4 == 0)
+    {
+        if (y % 100 == 0 && y % 400 == 0)
+            return;
+    }
+    else
+        return;
+    _info_month[1] = 29;
+}
 
 int main()
 {
@@ -272,10 +307,43 @@ BOOL SolarToLunar(lunar_t& lunar)
     cin >> Year >> Month >> Day;
     cout << endl;
 
-    //세부 코드 추후 추가 예정
+    if (Year < 1841 || 2043 < Year)
+    {
+        return FALSE;
+    }
+    if (Month < 1 || 12 < Month)
+    {
+        return FALSE;
+    }
+
+    febdays(Year);
+
+    if (Day < 1 || _info_month[Month - 1] < Day)
+    {
+        return FALSE;
+    }
+
+    int ly, lm, ld;
+    int m1, m2, mm, i, j;
+    int sy = Year, sm = Month, sd = Day;
+    long td, td1, td2;
+    int dt[203];
+    BOOL Yoon = FALSE;
 
 
-    cout << "음력: " << lunar.year_lunar << "년 " <<
-        (int)lunar.month << "월 " << (int)lunar.day << "일" << endl;
+
+
+
+
+
+    lunar.lunar_day = ld;
+    lunar.isyoondal = Yoon ? true : false;
+    lunar.lunar_month = lm;
+    lunar.lunar_year = ly;
+
+    cout << "음력: " << lunar.lunar_year << "년 " <<
+        (int)lunar.lunar_month << "월 " << (int)lunar.lunar_day << "일" << endl;
     cout << endl;
+
+    return TRUE;
 }

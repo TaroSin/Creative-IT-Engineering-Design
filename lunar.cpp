@@ -269,14 +269,14 @@ typedef struct _lunar_info
     bool isyoondal;          // 윤달여부0:평달/1:윤달
 } lunar_t;
 
-static int _info_month[12] =
+static int _info_month[12] =  // 나중에 Calendar.cpp 파일에 합칠 때 제거
 {
        31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
 };
 
 BOOL SolarToLunar(lunar_t& lunar);
 
-static void febdays(int y)
+static void febdays(int y)  // 나중에 Calendar.cpp 파일에 합칠 때 제거
 {
     _info_month[1] = 28;
 
@@ -330,11 +330,100 @@ BOOL SolarToLunar(lunar_t& lunar)
     int dt[203];
     BOOL Yoon = FALSE;
 
+    td1 = 1840 * 365L + 1840 / 4 - 1840 / 100 + 1840 / 400 + 23;
+    td2 = (sy - 1) * 365L + (sy - 1) / 4 - (sy - 1) / 100 + (sy - 1) / 400 + sd;
 
+    for (i = 0; i < sm - 1; i++)
+        td2 += _info_month[i];
+    td = td2 - td1 + 1;
 
+    for (i = 0; i <= sy - 1841; i++)
+    {
+        dt[i] = 0;
+        for (j = 0; j < 12; j++)
+        {
+            switch (_info_array[i][j])
+            {
+            case 1: mm = 29;
+                break;
+            case 2: mm = 30;
+                break;
+            case 3: mm = 58;   /* 29+29 */
+                break;
+            case 4: mm = 59;   /* 29+30 */
+                break;
+            case 5: mm = 59;   /* 30+29 */
+                break;
+            case 6: mm = 60;   /* 30+30 */
+                break;
+            }
+            dt[i] += mm;
+        }
+    }
+    ly = 0;
+    while (1)
+    {
+        if (td > dt[ly])
+        {
+            td -= dt[ly];
+            ly++;
+        }
+        else
+            break;
+    }
+    lm = 0;
+    while (1)
+    {
+        if (_info_array[ly][lm] <= 2)
+        {
+            mm = _info_array[ly][lm] + 28;
+            if (td > mm)
+            {
+                td -= mm;
+                lm++;
+            }
+            else
+                break;
+        }
+        else
+        {
+            switch (_info_array[ly][lm])
+            {
+            case 3: m1 = 29;
+                m2 = 29;
+                break;
+            case 4: m1 = 29;
+                m2 = 30;
+                break;
+            case 5: m1 = 30;
+                m2 = 29;
+                break;
+            case 6: m1 = 30;
+                m2 = 30;
+                break;
+            }
+            if (td > m1)
+            {
+                td -= m1;
+                if (td > m2)
+                {
+                    td -= m2;
+                    lm++;
+                }
+                else
+                {
+                    Yoon = TRUE;
+                    break;
+                }
+            }
+            else
+                break;
+        }
+    }
 
-
-
+    ly += 1841;
+    lm += 1;
+    ld = (Year % 400 == 0 || Year % 100 != 0 || Year % 4 == 0) ? td : td - 1;
 
     lunar.lunar_day = ld;
     lunar.isyoondal = Yoon ? true : false;

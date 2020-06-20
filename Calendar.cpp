@@ -10,7 +10,7 @@ void input(); // 연도와 월을 입력받는 함수.
 int getweek(int year, int month);
 void Cal_leap(); // 윤년계산 
 void output_calendar(); // 입력받은 연도와 월의 달력을 출력  
-void Select_Option(int&);
+void Select_Option(int&); // 옵션을 출력하고 입력받음 
 void textcolor(int foreground, int background); //색깔추가기능 
 
 int main()
@@ -88,7 +88,8 @@ void Select_Option(int &num) {
         week = getweek(year, month);
         Cal_leap();
         output_calendar();
-    }
+        while(num != 8) Select_Option(num);  
+	}
     else if (num == 8) cout << "\n프로그램을 종료합니다." << endl;
     else {
     	cout << "\n\n*************다시 선택해주세요.*************" << endl;

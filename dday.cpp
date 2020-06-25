@@ -11,11 +11,9 @@ private:
 	int t_day;
 public:
 	void SetDday(int m, int d);
-<<<<<<< HEAD
 	void SetToday(int tm, int td);
-=======
+
 	void SetToday(int m, int d);
->>>>>>> e83e24673c5ae715b0720526ca92d3fb678af4a6
 	int GetDays(int m);
 	int GetPastDay(int m, int d);
 	int GetLeftDay();
@@ -28,7 +26,6 @@ void DayofYear::SetDday(int m, int d)
 	d_day = d;
 }
 
-<<<<<<< HEAD
 void DayofYear::SetToday(int tm, int td)
 {
 	t_mon = tm;
@@ -36,41 +33,34 @@ void DayofYear::SetToday(int tm, int td)
 }
 
 // m월의 날짜 수
-=======
+
 void DayofYear::SetToday(int m, int d)
 {
 	t_mon = m;
 	t_day = d;
 }
 
->>>>>>> e83e24673c5ae715b0720526ca92d3fb678af4a6
 int DayofYear::GetDays(int m)
 {
 	int Month_days[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	return Month_days[m - 1];
 }
 
-<<<<<<< HEAD
 // 1월 1일부터 m월 d일까지 날짜 합
-=======
->>>>>>> e83e24673c5ae715b0720526ca92d3fb678af4a6
+
 int DayofYear::GetPastDay(int m, int d)
 {
 	int i, past = 0;
 
-<<<<<<< HEAD
 	// 1월부터 바로 전달까지 날짜 합
-=======
->>>>>>> e83e24673c5ae715b0720526ca92d3fb678af4a6
+
 	for (i = 1; i < m; i++)
 	{
 		past = past + GetDays(i);
 	}
 
-<<<<<<< HEAD
 	// 이번달 날짜 합
-=======
->>>>>>> e83e24673c5ae715b0720526ca92d3fb678af4a6
+
 	past = past + d;
 
 	return past;
@@ -78,10 +68,8 @@ int DayofYear::GetPastDay(int m, int d)
 
 int DayofYear::GetLeftDay()
 {
-<<<<<<< HEAD
 	// 1월 1일부터 D-day까지의 날짜 합 - 1월 1일부터 오늘까지의 날짜 합
-=======
->>>>>>> e83e24673c5ae715b0720526ca92d3fb678af4a6
+
 	return GetPastDay(d_mon, d_day) - GetPastDay(t_mon, t_day);
 }
 
@@ -89,7 +77,6 @@ void DayofYear::ShowLeftDay()
 {
 	int left = GetLeftDay();
 
-<<<<<<< HEAD
 	// D-day가 오늘 날짜보다 앞설 경우
 	if (left < 0)
 	{
@@ -97,8 +84,7 @@ void DayofYear::ShowLeftDay()
 		return;
 	}
 
-=======
->>>>>>> e83e24673c5ae715b0720526ca92d3fb678af4a6
+
 	cout << "D-day " << left << endl;
 }
 
@@ -117,8 +103,6 @@ int main()
 	dy.ShowLeftDay();
 
 	return 0;
-<<<<<<< HEAD
 }
-=======
+
 }
->>>>>>> e83e24673c5ae715b0720526ca92d3fb678af4a6

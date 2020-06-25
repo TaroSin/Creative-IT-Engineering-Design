@@ -3,7 +3,7 @@
 
 using namespace std;
 
-enum BOOL { FALSE = 0, TRUE = 1 };
+//enum BOOL { FALSE = 0, TRUE = 1 };
 
 /*  아래의 음력 데이터 :
 
@@ -274,7 +274,7 @@ static int _info_month[12] =  // 나중에 Calendar.cpp 파일에 합칠 때 제거
        31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
 };
 
-BOOL SolarToLunar(lunar_t& lunar);
+bool SolarToLunar(lunar_t& lunar);
 
 static void febdays(int y)  // 나중에 Calendar.cpp 파일에 합칠 때 제거
 {
@@ -299,7 +299,7 @@ int main()
     return 0;
 }
 
-BOOL SolarToLunar(lunar_t& lunar)
+bool SolarToLunar(lunar_t& lunar)
 {
     int Year, Month, Day;
 
@@ -309,18 +309,18 @@ BOOL SolarToLunar(lunar_t& lunar)
 
     if (Year < 1841 || 2043 < Year)
     {
-        return FALSE;
+        return false;
     }
     if (Month < 1 || 12 < Month)
     {
-        return FALSE;
+        return false;
     }
 
     febdays(Year);
 
-    if (Day < 1 || _info_month[Month - 1] < Day)
+    if (Day < 1 || Month_days[Month - 1] < Day)
     {
-        return FALSE;
+        return false;
     }
 
     int ly, lm, ld;
@@ -328,13 +328,13 @@ BOOL SolarToLunar(lunar_t& lunar)
     int sy = Year, sm = Month, sd = Day;
     long td, td1, td2;
     int dt[203];
-    BOOL Yoon = FALSE;
+    bool Yoon = false;
 
     td1 = 1840 * 365L + 1840 / 4 - 1840 / 100 + 1840 / 400 + 23;
     td2 = (sy - 1) * 365L + (sy - 1) / 4 - (sy - 1) / 100 + (sy - 1) / 400 + sd;
 
     for (i = 0; i < sm - 1; i++)
-        td2 += _info_month[i];
+        td2 += Month_days[i];
     td = td2 - td1 + 1;
 
     for (i = 0; i <= sy - 1841; i++)
@@ -412,7 +412,7 @@ BOOL SolarToLunar(lunar_t& lunar)
                 }
                 else
                 {
-                    Yoon = TRUE;
+                    Yoon = true;
                     break;
                 }
             }
@@ -434,5 +434,5 @@ BOOL SolarToLunar(lunar_t& lunar)
         (int)lunar.lunar_month << "월 " << (int)lunar.lunar_day << "일" << endl;
     cout << endl;
 
-    return TRUE;
+    return true;
 }

@@ -279,7 +279,9 @@ void gotoxy(int x, int y);
 bool SolarToLunar(lunar_t& lunar); // 양력 -> 음력
 int main()
 {
-    input();
+    system("mode con cols=100 lines=30 | title Calendar");
+	input();
+    system("cls");
     week = getweek(year, month);
     Cal_leap();
     output_calendar();
@@ -366,7 +368,6 @@ void Select_Option(int& num) {
     {
         lunar_t lunar;
         SolarToLunar(lunar);
-
         Select_Option(num);
     }
     else if (num == 5)
@@ -375,7 +376,7 @@ void Select_Option(int& num) {
     }
     else if (num == 6)
     {
-
+		
     }
     else if (num == 7) {
         system("cls");

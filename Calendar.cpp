@@ -367,7 +367,9 @@ void Select_Option(int& num) {
     if (num == 4)
     {
         lunar_t lunar;
-        SolarToLunar(lunar);
+        while(!SolarToLunar(lunar))
+        	cout << "다시 입력하세요.";
+        
         Select_Option(num);
     }
     else if (num == 5)

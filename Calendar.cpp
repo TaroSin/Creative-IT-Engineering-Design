@@ -259,6 +259,7 @@ static const char _info_array[203][12] =
     1, 5, 1, 2, 1, 2,    1, 2, 2, 2, 1, 2,
     1, 2, 1, 1, 2, 1,    1, 2, 2, 1, 2, 2,
 };
+
 typedef struct _lunar_info
 {
     unsigned short lunar_year;         // 음력변환후년도(양력과다를수있음)
@@ -266,6 +267,7 @@ typedef struct _lunar_info
     unsigned char lunar_day;                // 음력변환후일
     bool isyoondal;          // 윤달여부0:평달/1:윤달
 } lunar_t;
+
 int Month_days[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 int year, month, week;
 void input(); // 연도와 월을 입력받는 함수. 
@@ -308,6 +310,9 @@ int main()
 }
 
 void input() {
+	textcolor(9,0);
+	cout << "출력을 원하는 달력의 연도와 월을 입력하세요." << endl << endl;
+	textcolor(15, 0);
     cout << "년: ";
     cin >> year;
     cout << "월: ";
@@ -530,7 +535,10 @@ void Select_Option(int& num) {
             Cal_leap();
             week = getweek(year, month);
             output_calendar();
-            cout << "\n\n*************다시 선택해주세요.*************" << endl;
+            textcolor(12, 0);
+            cout << "\n\n\n\n\n\n";
+            cout << "*************다시 선택해주세요.*************" << endl;
+            textcolor(15 ,0);
             Select_Option(num);
         }
     }

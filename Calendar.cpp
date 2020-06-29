@@ -1,7 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include <windows.h>
-#include <cstring>
+#include <string>
 using namespace std;
 
 /*  아래의 음력 데이터 :
@@ -288,7 +288,6 @@ private:
 public:
     void SetDday();
     void SetToday();
-
     int GetPastDay(int m, int d);
     int GetLeftDay();
     void ShowLeftDay();
@@ -296,6 +295,7 @@ public:
 
 int main()
 {
+	textcolor(15, 0);
     system("mode con cols=100 lines=30 | title Calendar");
     input();
     system("cls");
@@ -308,9 +308,9 @@ int main()
 }
 
 void input() {
-    printf("년: ");
+    cout << "년: ";
     cin >> year;
-    printf("월: ");
+    cout << "월: ";
     cin >> month;
 }
 
@@ -441,10 +441,11 @@ void output_calendar() {
         week = (week + 1) % 7;
     }
     cout << endl;
+    textcolor(15, 0);
 }
 
 void Select_Option(int& num) {
-    gotoxy(59, 2);
+    gotoxy(59, 1);
     cout << "[원하는 옵션 선택]";
     gotoxy(60, 3);
     cout << "① 일정 추가";
@@ -463,8 +464,13 @@ void Select_Option(int& num) {
     gotoxy(60, 10);
     cout << "⑧ 종료";
     gotoxy(60, 11);
+    cout << endl;
+    gotoxy(60, 12);
+    textcolor(2, 0);
     cout << "옵션 변호: ";
     cin >> num;
+    textcolor(15,0);
+    
     if (num == 4)
     {
         system("cls");
@@ -522,6 +528,7 @@ void Select_Option(int& num) {
         {
             system("cls");
             Cal_leap();
+            week = getweek(year, month);
             output_calendar();
             cout << "\n\n*************다시 선택해주세요.*************" << endl;
             Select_Option(num);

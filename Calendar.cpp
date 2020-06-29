@@ -366,10 +366,17 @@ void Select_Option(int& num) {
     cin >> num;
     if (num == 4)
     {
+    	system("cls");
+        Cal_leap();
+        output_calendar();
         lunar_t lunar;
         while(!SolarToLunar(lunar))
-        	cout << "다시 입력하세요.";
-        
+        {
+        	system("cls");
+			Cal_leap();
+        	output_calendar();
+			cout << "\n\n*************다시 입력해주세요.*************" << endl;
+		}
         Select_Option(num);
     }
     else if (num == 5)
@@ -382,11 +389,12 @@ void Select_Option(int& num) {
     }
     else if (num == 7) {
         system("cls");
-        input();
+		input();
+        system("cls");
         week = getweek(year, month);
         Cal_leap();
         output_calendar();
-        while (num != 8) Select_Option(num);
+        Select_Option(num);
     }
     else if (num == 8)
     {
@@ -395,9 +403,14 @@ void Select_Option(int& num) {
         Sleep(1000);
     }
     else {
-        cout << "\n\n*************다시 선택해주세요.*************" << endl;
         while (num != 1 && num != 2 && num != 3 && num != 4 && num != 5 && num != 6 && num != 7 && num != 8)
-            Select_Option(num);
+        {
+        	system("cls");
+			Cal_leap();
+        	output_calendar();
+			cout << "\n\n*************다시 선택해주세요.*************" << endl; 
+			Select_Option(num);      	
+		}
     }
 }
 

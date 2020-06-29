@@ -423,18 +423,21 @@ void DayofYear::ShowLeftDay()
 }
 
 void output_calendar() {
-    textcolor(11, 0);
-    cout << "  " << endl << "       " << year << "년 " << month << "월       " << endl << endl << "  " <<
-        "일 " << "월 " << "화 " << "수 " << "목 " << "금 " << "토  " << endl << "  ";
-    textcolor(15, 0);
+	textcolor(15, 0);
+	cout << "  " << endl << "      [" << year << "년 " << month << "월]      " << endl << endl << "  " <<
+        "일 " << "월 " << "화 " << "수 " << "목 " << "금 " << "토  " << endl << endl << "  ";
+	
     for (int i = 0; i < week; i++)
         cout << "   ";
-
+	
     for (int j = 1; j <= Month_days[month - 1]; j++)
     {
+    	if(week % 7 == 0) textcolor(12, 0); // 일요일은 숫자 색을 빨간색으로  
+    	else if(week % 7 == 6) textcolor(9, 0); // 토요일은 숫자 색을 파란색으로  
+    	else textcolor(15, 0);
         printf("%2d ", j);
         if (week % 7 == 6)
-            cout << "  " << endl << "  ";
+            cout << "  " << endl << "  "; 
         week = (week + 1) % 7;
     }
     cout << endl;

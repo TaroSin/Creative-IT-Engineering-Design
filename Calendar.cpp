@@ -277,10 +277,27 @@ void Select_Option(int&); // 옵션을 출력하고 입력받음
 void textcolor(int foreground, int background); //색깔추가기능 
 void gotoxy(int x, int y);
 bool SolarToLunar(lunar_t& lunar); // 양력 -> 음력
+
+class DayofYear
+{
+private:
+    int d_mon;
+    int d_day;
+    int t_mon;
+    int t_day;
+public:
+    void SetDday();
+    void SetToday();
+
+    int GetPastDay(int m, int d);
+    int GetLeftDay();
+    void ShowLeftDay();
+};
+
 int main()
 {
     system("mode con cols=100 lines=30 | title Calendar");
-	input();
+    input();
     system("cls");
     week = getweek(year, month);
     Cal_leap();
@@ -322,6 +339,87 @@ static void febdays(int y)  // 윤년 인자 받는 버전
 void Cal_leap() {
     if (month == 2 && ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0))
         Month_days[1]++;
+}
+
+void DayofYear::SetDday()
+{
+    cout << "\n\n날짜를 입력하시오 (월 일): ";
+    int m, d;
+    cin >> m >> d;
+    while (m < 1 || m>12 || d < 1 || Month_days[m - 1] < d)
+    {
+        system("cls");
+        Cal_leap();
+        output_calendar();
+        cout << "\n\n*************다시 입력해주세요.*************" << endl;
+        cout << "\n\n날짜를 입력하시오 (월 일): ";
+        cin >> m >> d;
+    }
+
+    d_mon = m;
+    d_day = d;
+}
+
+void DayofYear::SetToday()
+{
+    cout << "\n\n기준이 될 날짜를 입력하세요 (월 일): ";
+    int tm, td;
+    cin >> tm >> td;
+    while (tm < 1 || tm>12 || td < 1 || Month_days[tm - 1] < td)
+    {
+        system("cls");
+        Cal_leap();
+        output_calendar();
+        cout << "\n\n*************다시 입력해주세요.*************" << endl;
+        cout << "\n\n기준이 될 날짜를 입력하세요 (월 일): ";
+        cin >> tm >> td;
+    }
+
+    t_mon = tm;
+    t_day = td;
+
+}
+
+// 1월 1일부터 m월 d일까지 날짜 합
+
+int DayofYear::GetPastDay(int m, int d)
+{
+    int i, past = 0;
+
+    // 1월부터 바로 전달까지 날짜 합
+
+    for (i = 1; i < m; i++)
+    {
+        past = past + Month_days[i - 1];
+    }
+
+    // 이번달 날짜 합
+
+    past = past + d;
+
+    return past;
+}
+
+int DayofYear::GetLeftDay()
+{
+    // 1월 1일부터 D-day까지의 날짜 합 - 1월 1일부터 오늘까지의 날짜 합
+
+    return GetPastDay(d_mon, d_day) - GetPastDay(t_mon, t_day);
+}
+
+void DayofYear::ShowLeftDay()
+{
+    int left = GetLeftDay();
+
+    // D-day가 오늘 날짜보다 앞설 경우
+    if (left < 0)
+    {
+        cout << "D-day가 오늘 날짜보다 앞설 수 없음" << endl;
+        return;
+    }
+
+
+    cout << "\n\nD-day " << left << endl;
 }
 
 void output_calendar() {
@@ -366,30 +464,44 @@ void Select_Option(int& num) {
     cin >> num;
     if (num == 4)
     {
-    	system("cls");
+        system("cls");
         Cal_leap();
+        week = getweek(year, month);
         output_calendar();
         lunar_t lunar;
-        while(!SolarToLunar(lunar))
+        while (!SolarToLunar(lunar))
         {
-        	system("cls");
-			Cal_leap();
-        	output_calendar();
-			cout << "\n\n*************다시 입력해주세요.*************" << endl;
-		}
+            system("cls");
+            Cal_leap();
+            week = getweek(year, month);
+            output_calendar();
+            cout << "\n\n*************다시 입력해주세요.*************" << endl;
+        }
         Select_Option(num);
     }
     else if (num == 5)
     {
+        system("cls");
+        Cal_leap();
+        week = getweek(year, month);
+        output_calendar();
 
+        DayofYear dy;
+
+        dy.SetToday();
+
+        dy.SetDday();
+
+        dy.ShowLeftDay();
+        Select_Option(num);
     }
     else if (num == 6)
     {
-		
+
     }
     else if (num == 7) {
         system("cls");
-		input();
+        input();
         system("cls");
         week = getweek(year, month);
         Cal_leap();
@@ -405,12 +517,12 @@ void Select_Option(int& num) {
     else {
         while (num != 1 && num != 2 && num != 3 && num != 4 && num != 5 && num != 6 && num != 7 && num != 8)
         {
-        	system("cls");
-			Cal_leap();
-        	output_calendar();
-			cout << "\n\n*************다시 선택해주세요.*************" << endl; 
-			Select_Option(num);      	
-		}
+            system("cls");
+            Cal_leap();
+            output_calendar();
+            cout << "\n\n*************다시 선택해주세요.*************" << endl;
+            Select_Option(num);
+        }
     }
 }
 

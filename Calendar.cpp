@@ -3,7 +3,7 @@
 #include <windows.h>
 #include <string>
 using namespace std;
-
+#define MAX_NUM 100 
 /*  아래의 음력 데이터 :
 
     평달 -  작은 달 : 1
@@ -260,6 +260,18 @@ static const char _info_array[203][12] =
     1, 2, 1, 1, 2, 1,    1, 2, 2, 1, 2, 2,
 };
 
+typedef struct{
+     char name[30];
+     char day[30];
+}User;
+
+int saveFile(User* ptr, int* num);
+int openFile(User* ptr, int* num);
+void insert(User* ptr, int* num);
+int deleted(User* ptr, int* num);
+int search(User* ptr, int* num);
+void printAll(User* ptr, int* num);
+void schedule(int year);
 typedef struct _lunar_info
 {
     unsigned short lunar_year;         // 음력변환후년도(양력과다를수있음)
@@ -453,45 +465,37 @@ void Select_Option(int& num) {
     gotoxy(59, 1);
     cout << "[원하는 옵션 선택]";
     gotoxy(60, 3);
-    cout << "① 일정 추가";
+    cout << "① 일정 기능(추가,변경,삭제,검색,확인) ";
     gotoxy(60, 4);
-    cout << "② 일정 수정";
+    cout << "② 날짜 계산";
     gotoxy(60, 5);
-    cout << "③ 일정 삭제";
+    cout << "③ 음력 변환";
     gotoxy(60, 6);
-    cout << "④ 일정 확인";
+    cout << "④ 달력날짜 변경";
     gotoxy(60, 7);
-    cout << "⑤ 날짜 계산";
-    gotoxy(60, 8);
-    cout << "⑥ 음력 변환";
+    cout << "⑤ 종료 ";
     gotoxy(60, 9);
-    cout << "⑦ 달력날짜 변경";
-    gotoxy(60, 10);
-    cout << "⑧ 종료";
-    gotoxy(60, 11);
     cout << endl;
-    gotoxy(60, 12);
+    gotoxy(60, 10);
     textcolor(2, 0);
     cout << "옵션 변호: ";
     cin >> num;
     textcolor(15,0);
+//일정관리기능 추가,수정,삭제,검색,확인 
     if(num == 1)
     {
-    	
+    	 system("cls");
+         Cal_leap();
+         week = getweek(year, month);
+         output_calendar();
+    	 schedule(year);
+    	 system("cls");
+         Cal_leap();
+         week = getweek(year, month);
+         output_calendar();
+         Select_Option(num);
 	}
-    else if(num == 2)
-    {
-    	
-	}
-	else if(num == 3)
-    {
-    	
-	}
-	else if (num == 4)
-    {
-
-    }
-    else if (num == 5)
+    else if (num == 2)
     {
         system("cls");
         Cal_leap();
@@ -507,7 +511,7 @@ void Select_Option(int& num) {
         dy.ShowLeftDay();
         Select_Option(num);
     }
-    else if (num == 6)
+    else if (num == 3)
     {
         system("cls");
         Cal_leap();
@@ -524,7 +528,7 @@ void Select_Option(int& num) {
         }
         Select_Option(num);
     }
-    else if (num == 7) {
+    else if (num == 4) {
         system("cls");
         input();
         system("cls");
@@ -533,14 +537,14 @@ void Select_Option(int& num) {
         output_calendar();
         Select_Option(num);
     }
-    else if (num == 8)
+    else if (num == 5)
     {
         system("cls");
         cout << "\n프로그램을 종료합니다." << endl;
         Sleep(1000);
     }
     else {
-        while (num != 1 && num != 2 && num != 3 && num != 4 && num != 5 && num != 6 && num != 7 && num != 8)
+        while (num != 1 && num != 2 && num != 3 && num != 4 && num != 5)
         {
             system("cls");
             Cal_leap();
@@ -702,4 +706,208 @@ bool SolarToLunar(lunar_t& lunar)
     cout << endl;
 
     return true;
+}
+
+void schedule(int year)
+{
+	 int input;
+     User user[MAX_NUM]; //사용자 정보를 저장할 구조체 배열
+     int person = 0; //저장된 user수
+     openFile(user, &person);//저장된 데이터를 불러오는 함수
+     //메뉴 선택
+     while (1){
+          printf("***** Menu ***** \n");
+          printf("1. Insert \n");
+          printf("2. Delete \n");
+          printf("3. Search \n");
+          printf("4. Print All \n");
+          printf("5. Save and Exit \n");
+          printf("Choose the item: ");
+          scanf("%d", &input);
+       if (input == 1){
+               printf("\n[INSERT] \n");
+               insert(user, &person);
+          }
+          else if (input == 2){
+               printf("\n[Delete] \n");
+               deleted(user, &person);
+          }
+          else if (input == 3){
+               printf("\n[Search] \n");
+               search(user, &person);
+          }
+          else if (input == 4){
+               printf("\n[Print All] \n");
+               printAll(user, &person);
+          }
+          else if (input == 5){
+               saveFile(user, &person);
+               break;
+          }
+          else
+               printf("\nError! ReTry! \n\n");
+         }
+}
+
+//데이터를 파일에 저장하는 함수
+int saveFile(User* ptr, int* num){
+
+     if (*num > 0){
+          int i, state;
+          FILE* fp = fopen("Schedule.txt", "wt");
+          /* fopen함수는 오류발생시 NULL을 리턴하므로
+          파일 개방 중 오류발생시 프로그램을 종료 */
+          if (fp == NULL){
+               printf("File Open Error!\n");
+               return 1;
+          }
+          //구조체 배열에 저장된 데이터를 파일에 저장
+          //줄바꿈으로 구분하여 저장
+          for (i = 0; i < *num; i++){
+               fprintf(fp, "%s %s", ptr[i].name, ptr[i].day);
+               fputc('\n', fp);
+          }
+          /* fclose함수는 종료시 오류가 발생하면
+          0이 아닌 다른값을 리턴하므로 비정상 종료로 판단되면
+          안내후 프로그램을 종료 */
+          state = fclose(fp);
+          if (state != 0){
+               printf("File Close Error!\n");
+               return 1;
+          }
+          printf("\n  Data Save \n");
+          return 0;
+     }
+     else{
+          printf("\n  Exit \n");
+          return 0;
+     }
+}
+
+//파일로부터 데이터를 불러오는 함수
+int openFile(User* ptr, int* num){
+     int state;
+     char temp;
+     FILE* fp = fopen("Schedule.txt", "rt");
+     if (fp == NULL){
+          printf("File Open Error!\n");
+          return 1;
+     }
+     //파일에 저장된 데이터를 구조체 배열에 저장
+     while (1){
+          fscanf(fp, "%s %s", ptr[*num].name, ptr[*num].day);
+          if (feof(fp) != 0)
+               break;
+          (*num)++;
+     }
+     /* fclose함수는 종료시 오류가 발생하면
+     0이 아닌 다른값을 리턴하므로 비정상 종료로 판단되면
+     안내후 프로그램을 종료 */
+     state = fclose(fp);
+     if (state != 0){
+          printf("File Close Error!\n");
+          return 1;
+     }
+     return 0;
+}
+//사용자의 정보를 삽입하는 함수
+void insert(User* ptr, int* num){
+
+     //유저정보가 꽉 차지 않으면
+     if (*num < MAX_NUM){
+          printf("일정을 입력해주세요 : ");
+          scanf("%s", ptr[*num].name);
+          printf("날짜를 입력해주세요 : ");
+          scanf("%s", ptr[*num].day);
+
+          (*num)++;
+          printf("  Data Inserted \n\n");
+     }
+     //유저 정보가 꽉 차면
+     else
+          printf("  Data Full \n\n");
+    }
+//사용자의 정보를 삭제하는 함수
+int deleted(User* ptr, int* num){
+     char name[30];
+     int i, j;
+     //유저 정보가 한개라도 남아있으면
+     if (*num > 0){
+          printf("삭제하고자하는 일정을 입력해주세요 : ");
+          scanf("%s", name);
+          for (i = 0; i < MAX_NUM; i++){
+           //문자열이므로 비교하기위해 strcmp사용
+               if (strcmp(name, ptr[i].name) == 0){
+
+                    (*num)--;
+                    printf("  Data Deleted \n\n");
+
+                    //데이터가 가득 차지 않았다면
+                    if (i != MAX_NUM - 1){
+                         for (j = i; j < MAX_NUM; j++){
+                              //문자열이므로 strcpy를 사용하여 데이터 복사
+                              strcpy(ptr[j].name, ptr[j + 1].name);
+                              strcpy(ptr[j].day, ptr[j + 1].day);
+                         }
+                         //구조체 배열의 마지막을 NULL로 바꿈
+                         *ptr[MAX_NUM - 1].name = NULL;
+                         *ptr[MAX_NUM - 1].day = NULL;
+                    }
+                        //데이터가 가득 찼다면
+                    else{
+                         //구조체 배열의 마지막을 NULL로 바꿈
+                         *ptr[MAX_NUM - 1].name = NULL;
+                         *ptr[MAX_NUM - 1].day = NULL;
+                    }
+               return 0;
+               }
+          }
+          printf("Not Found \n\n");
+          return 0;
+     }
+     //저장된 유저 정보가 없다면
+     else{
+          printf("  No Data \n\n");
+          return 0;
+     }
+}
+//사용자의 정보를 검색하는 함수
+int search(User* ptr, int* num){
+     char name[30];
+     int i;
+     //저장된 데이터가 있다면
+     if (*num > 0){
+          printf("검색하고자 하는 일정을 입력해주세요 : ");
+          scanf("%s", name);
+          for (i = 0; i < MAX_NUM; i++){
+               //strcmp는 문자열이 일치할때 0을 반환
+               //0은 C언어에서 거짓을 의미
+               //그러므로 ! 을 붙여 참으로 변경하여 실행
+               if (!strcmp(name, ptr[i].name)){
+                    printf("일정 : %s ", ptr[i].name);
+                    printf("날짜 : %s \n", ptr[i].day);
+                    printf("  Data Found \n\n");
+                    return 0;
+               }
+          }
+      printf("Not Found \n\n");
+      return 0;
+     }
+     else{
+          printf("  No Data \n\n");
+          return 0;
+     }
+}
+//저장된 모든 이름과 전화번호 정보를 출력하는 함수
+void printAll(User* ptr, int* num){
+     int i = 0;
+     if (*num > 0){
+          for (i = 0; i < *num; i++){
+               printf("일정 : %s ", ptr[i].name);
+               printf("날짜 : %s \n", ptr[i].day);
+          }
+          printf("  Data Print \n\n");
+     }
+     else
+          printf("  No Data \n\n");
 }

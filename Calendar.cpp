@@ -311,7 +311,7 @@ int main()
 
 void input() {
 	textcolor(9,0);
-	cout << "출력을 원하는 달력의 연도와 월을 입력하세요." << endl << endl;
+	cout << endl << "출력을 원하는 달력의 연도와 월을 입력하세요." << endl << endl;
 	textcolor(15, 0);
     cout << "년: ";
     cin >> year;
@@ -459,13 +459,13 @@ void Select_Option(int& num) {
     gotoxy(60, 5);
     cout << "③ 일정 삭제";
     gotoxy(60, 6);
-    cout << "④ 음력 변환";
+    cout << "④ 일정 확인";
     gotoxy(60, 7);
     cout << "⑤ 날짜 계산";
     gotoxy(60, 8);
-    cout << "⑥ 전체 일정 확인";
+    cout << "⑥ 음력 변환";
     gotoxy(60, 9);
-    cout << "⑦ 날짜 변경";
+    cout << "⑦ 달력날짜 변경";
     gotoxy(60, 10);
     cout << "⑧ 종료";
     gotoxy(60, 11);
@@ -487,22 +487,9 @@ void Select_Option(int& num) {
     {
     	
 	}
-    else if (num == 4)
+	else if (num == 4)
     {
-        system("cls");
-        Cal_leap();
-        week = getweek(year, month);
-        output_calendar();
-        lunar_t lunar;
-        while (!SolarToLunar(lunar))
-        {
-            system("cls");
-            Cal_leap();
-            week = getweek(year, month);
-            output_calendar();
-            cout << "\n\n*************다시 입력해주세요.*************" << endl;
-        }
-        Select_Option(num);
+
     }
     else if (num == 5)
     {
@@ -522,7 +509,20 @@ void Select_Option(int& num) {
     }
     else if (num == 6)
     {
-
+        system("cls");
+        Cal_leap();
+        week = getweek(year, month);
+        output_calendar();
+        lunar_t lunar;
+        while (!SolarToLunar(lunar))
+        {
+            system("cls");
+            Cal_leap();
+            week = getweek(year, month);
+            output_calendar();
+            cout << "\n\n*************다시 입력해주세요.*************" << endl;
+        }
+        Select_Option(num);
     }
     else if (num == 7) {
         system("cls");

@@ -475,8 +475,19 @@ void Select_Option(int& num) {
     cout << "옵션 변호: ";
     cin >> num;
     textcolor(15,0);
-    
-    if (num == 4)
+    if(num == 1)
+    {
+    	
+	}
+    else if(num == 2)
+    {
+    	
+	}
+	else if(num == 3)
+    {
+    	
+	}
+    else if (num == 4)
     {
         system("cls");
         Cal_leap();

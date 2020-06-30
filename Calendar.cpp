@@ -717,7 +717,11 @@ void schedule(int year)
      openFile(user, &person);//저장된 데이터를 불러오는 함수
      //메뉴 선택
      while (1){
-     	  gotoxy(59, 1);
+     	  system("cls");
+     	  Cal_leap();
+          week = getweek(year, month);
+          output_calendar();
+		  gotoxy(59, 1);
           cout << "[일정 관리 옵션]" << endl;
           gotoxy(60, 3);
           cout << "① 일정추가" << endl;
@@ -737,25 +741,53 @@ void schedule(int year)
        if (input == 1){
                cout << "\n[추가할 일정] \n";
                insert(user, &person);
+			   for(int j=3;j>0;j--)
+			   {
+				   cout << j << "초 후 일정관리화면으로 돌아갑니다." <<endl;
+				   Sleep(1000);	   	
+			   }
           }
           else if (input == 2){
                cout << "\n[삭제할 일정] \n";
                deleted(user, &person);
+			   for(int j=3;j>0;j--)
+			   {
+				   cout << j << "초 후 일정관리화면으로 돌아갑니다." <<endl;
+				   Sleep(1000);	   	
+			   }
           }
           else if (input == 3){
                cout << "\n[일정 검색] \n"; 
                search(user, &person);
+			   for(int j=5;j>0;j--)
+			   {
+				   cout << j << "초 후 일정관리화면으로 돌아갑니다." <<endl;
+				   Sleep(1000);	   	
+			   }
           }
           else if (input == 4){
-               cout << "\n[P일정 확인] \n";
+               cout << "\n[일정 확인] \n";
                printAll(user, &person);
+			   for(int j=5;j>0;j--)
+			   {
+				   cout << j << "초 후 일정관리화면으로 돌아갑니다." <<endl;
+				   Sleep(1000);	   	
+			   }
           }
           else if (input == 5){
                saveFile(user, &person);
                break;
           }
           else
-               cout << "\n에러! 다시 시도해주세요! \n\n";
+          {
+          	   cout << "\n에러! 다시 시도해주세요! \n\n";
+			   for(int j=3;j>0;j--)
+			   {
+				   cout << j << "초 후 일정관리화면으로 돌아갑니다." <<endl;
+				   Sleep(1000);	   	
+			   }
+		  }
+
          }
 }
 
@@ -912,11 +944,10 @@ int search(User* ptr, int* num){
 void printAll(User* ptr, int* num){
      int i = 0;
      if (*num > 0){
-          for (i = 0; i < *num; i++){
-               cout << "일정 : " << ptr[i].name;
-               cout << "날짜 :  \n" << ptr[i].day;
+		  for (i = 0; i < *num; i++){
+               cout << " 일정 : " << ptr[i].name;
+               cout << " 날짜 : " << ptr[i].day << endl; 
           }
-          cout << " 일정 출력 \n\n";
      }
      else
           cout << "-> 데이터가 존재하지 않습니다. \n\n";

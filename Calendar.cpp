@@ -281,6 +281,7 @@ typedef struct _lunar_info
 } lunar_t;
 
 int Month_days[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+int Month_days2[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 int year, month, week;
 void input(); // 연도와 월을 입력받는 함수. 
 int getweek(int year, int month);
@@ -291,6 +292,7 @@ void Select_Option(int&); // 옵션을 출력하고 입력받음
 void textcolor(int foreground, int background); //색깔추가기능 
 void gotoxy(int x, int y);
 bool SolarToLunar(lunar_t& lunar); // 양력 -> 음력
+void holiday(int year);
 
 class DayofYear
 {
@@ -342,7 +344,7 @@ int getweek(int year, int month) {
 
 static void febdays(int y)  // 윤년 인자 받는 버전
 {
-    Month_days[1] = 28;
+    Month_days2[1] = 28;
 
     if (y % 4 == 0)
     {
@@ -351,7 +353,7 @@ static void febdays(int y)  // 윤년 인자 받는 버전
     }
     else
         return;
-    Month_days[1] = 29;
+    Month_days2[1] = 29;
 }
 void Cal_leap() {
     if (month == 2 && ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0))
@@ -473,10 +475,12 @@ void Select_Option(int& num) {
     gotoxy(60, 6);
     cout << "④ 달력날짜 변경";
     gotoxy(60, 7);
-    cout << "⑤ 종료 ";
+    cout << "⑤ 올해 공휴일 확인";
     gotoxy(60, 8);
-    cout << endl;
+    cout << "⑥ 종료 ";
     gotoxy(60, 9);
+    cout << endl;
+    gotoxy(60, 10); 
     textcolor(2, 0);
     cout << "옵션 번호: ";
     cin >> num;
@@ -537,7 +541,16 @@ void Select_Option(int& num) {
         output_calendar();
         Select_Option(num);
     }
-    else if (num == 5)
+    else if ( num == 5)
+	{
+		system("cls");
+        Cal_leap();
+        week = getweek(year, month);
+        output_calendar();
+        holiday(year);
+        Select_Option(num);
+	} 
+    else if (num == 6)
     {
         system("cls");
         cout << "\n프로그램을 종료합니다." << endl;
@@ -589,7 +602,7 @@ bool SolarToLunar(lunar_t& lunar)
 
     febdays(Year);
 
-    if (Day < 1 || Month_days[Month - 1] < Day)
+    if (Day < 1 || Month_days2[Month - 1] < Day)
     {
         return false;
     }
@@ -605,7 +618,7 @@ bool SolarToLunar(lunar_t& lunar)
     td2 = (sy - 1) * 365L + (sy - 1) / 4 - (sy - 1) / 100 + (sy - 1) / 400 + sd;
 
     for (i = 0; i < sm - 1; i++)
-        td2 += Month_days[i];
+        td2 += Month_days2[i];
     td = td2 - td1 + 1;
 
     for (i = 0; i <= sy - 1841; i++)
@@ -919,4 +932,21 @@ void printAll(User* ptr, int* num){
      }
      else
           cout << "-> 데이터가 존재하지 않습니다. \n\n";
+}
+
+void holiday(int year)
+{
+	char from_holiday_txt[103];
+	FILE* file_pointer;
+	
+	file_pointer = fopen("holiday.txt", "r");
+	
+	cout <<"\n\n\n " << year;
+	while(fgets(from_holiday_txt,103,file_pointer)!=NULL)
+	{
+		cout << from_holiday_txt;
+		memset(from_holiday_txt,0,103);
+	}
+	
+	fclose(file_pointer);
 }

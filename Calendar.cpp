@@ -281,6 +281,7 @@ typedef struct _lunar_info
 } lunar_t;
 
 int Month_days[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+int lunar_Month_days[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 int year, month, week;
 void input(); // 연도와 월을 입력받는 함수. 
 int getweek(int year, int month);
@@ -342,7 +343,7 @@ int getweek(int year, int month) {
 
 static void febdays(int y)  // 윤년 인자 받는 버전
 {
-    Month_days[1] = 28;
+    lunar_Month_days[1] = 28;
 
     if (y % 4 == 0)
     {
@@ -351,11 +352,11 @@ static void febdays(int y)  // 윤년 인자 받는 버전
     }
     else
         return;
-    Month_days[1] = 29;
+    lunar_Month_days[1] = 29;
 }
 void Cal_leap() {
     if (month == 2 && ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0))
-        Month_days[1]++;
+        lunar_Month_days[1]++;
 }
 
 void DayofYear::SetDday()
@@ -589,7 +590,7 @@ bool SolarToLunar(lunar_t& lunar)
 
     febdays(Year);
 
-    if (Day < 1 || Month_days[Month - 1] < Day)
+    if (Day < 1 || lunar_Month_days[Month - 1] < Day)
     {
         return false;
     }
@@ -605,7 +606,7 @@ bool SolarToLunar(lunar_t& lunar)
     td2 = (sy - 1) * 365L + (sy - 1) / 4 - (sy - 1) / 100 + (sy - 1) / 400 + sd;
 
     for (i = 0; i < sm - 1; i++)
-        td2 += Month_days[i];
+        td2 += lunar_Month_days[i];
     td = td2 - td1 + 1;
 
     for (i = 0; i <= sy - 1841; i++)

@@ -465,7 +465,7 @@ void Select_Option(int& num) {
     gotoxy(59, 1);
     cout << "[원하는 옵션 선택]";
     gotoxy(60, 3);
-    cout << "① 일정 기능(추가,변경,삭제,검색,확인) ";
+    cout << "① 일정 관리(추가,변경,삭제,검색,확인) ";
     gotoxy(60, 4);
     cout << "② 날짜 계산";
     gotoxy(60, 5);
@@ -474,11 +474,11 @@ void Select_Option(int& num) {
     cout << "④ 달력날짜 변경";
     gotoxy(60, 7);
     cout << "⑤ 종료 ";
-    gotoxy(60, 9);
+    gotoxy(60, 8);
     cout << endl;
-    gotoxy(60, 10);
+    gotoxy(60, 9);
     textcolor(2, 0);
-    cout << "옵션 변호: ";
+    cout << "옵션 번호: ";
     cin >> num;
     textcolor(15,0);
 //일정관리기능 추가,수정,삭제,검색,확인 
@@ -716,28 +716,37 @@ void schedule(int year)
      openFile(user, &person);//저장된 데이터를 불러오는 함수
      //메뉴 선택
      while (1){
-          printf("***** Menu ***** \n");
-          printf("1. Insert \n");
-          printf("2. Delete \n");
-          printf("3. Search \n");
-          printf("4. Print All \n");
-          printf("5. Save and Exit \n");
-          printf("Choose the item: ");
-          scanf("%d", &input);
+     	  gotoxy(59, 1);
+          cout << "[일정 관리 옵션]" << endl;
+          gotoxy(60, 3);
+          cout << "① 일정추가" << endl;
+          gotoxy(60, 4);
+          cout << "② 일정삭제" << endl;
+          gotoxy(60, 5);
+          cout << "③ 일정 검색" << endl; 
+          gotoxy(60, 6);
+          cout << "④ 일정 확인" << endl;
+          gotoxy(60, 7);
+          cout << "⑤ 저장하고 나가기" << endl;
+          gotoxy(60, 9);
+          textcolor(2, 0);
+          cout << "옵션 번호: ";
+          cin >> input;
+          textcolor(15, 0);
        if (input == 1){
-               printf("\n[INSERT] \n");
+               cout << "\n[추가할 일정] \n";
                insert(user, &person);
           }
           else if (input == 2){
-               printf("\n[Delete] \n");
+               cout << "\n[삭제할 일정] \n";
                deleted(user, &person);
           }
           else if (input == 3){
-               printf("\n[Search] \n");
+               cout << "\n[일정 검색] \n"; 
                search(user, &person);
           }
           else if (input == 4){
-               printf("\n[Print All] \n");
+               cout << "\n[P일정 확인] \n";
                printAll(user, &person);
           }
           else if (input == 5){
@@ -745,7 +754,7 @@ void schedule(int year)
                break;
           }
           else
-               printf("\nError! ReTry! \n\n");
+               cout << "\n에러! 다시 시도해주세요! \n\n";
          }
 }
 
@@ -818,14 +827,14 @@ void insert(User* ptr, int* num){
           printf("일정을 입력해주세요 : ");
           scanf("%s", ptr[*num].name);
           printf("날짜를 입력해주세요 : ");
-          scanf("%s", ptr[*num].day);
+          cin >> ptr[*num].day;
 
           (*num)++;
-          printf("  Data Inserted \n\n");
+          cout << "  일정이 추가되었습니다. \n\n";
      }
      //유저 정보가 꽉 차면
      else
-          printf("  Data Full \n\n");
+          cout << "  일정이 꽉 찼습니다." << endl << "불필요한 일정을 제거해주십시오." << endl; 
     }
 //사용자의 정보를 삭제하는 함수
 int deleted(User* ptr, int* num){
@@ -833,14 +842,14 @@ int deleted(User* ptr, int* num){
      int i, j;
      //유저 정보가 한개라도 남아있으면
      if (*num > 0){
-          printf("삭제하고자하는 일정을 입력해주세요 : ");
-          scanf("%s", name);
+          cout << "삭제하고자하는 일정을 입력해주세요 : ";
+          cin >> name; 
           for (i = 0; i < MAX_NUM; i++){
            //문자열이므로 비교하기위해 strcmp사용
                if (strcmp(name, ptr[i].name) == 0){
 
                     (*num)--;
-                    printf("  Data Deleted \n\n");
+                    cout << "일정이 삭제되었습니다. \n\n";
 
                     //데이터가 가득 차지 않았다면
                     if (i != MAX_NUM - 1){
@@ -862,12 +871,12 @@ int deleted(User* ptr, int* num){
                return 0;
                }
           }
-          printf("Not Found \n\n");
+          cout << "찾지 못했습니다. \n\n";
           return 0;
      }
      //저장된 유저 정보가 없다면
      else{
-          printf("  No Data \n\n");
+          cout << "-> 일정이 존재하지 않습니다. \n\n";
           return 0;
      }
 }
@@ -877,24 +886,24 @@ int search(User* ptr, int* num){
      int i;
      //저장된 데이터가 있다면
      if (*num > 0){
-          printf("검색하고자 하는 일정을 입력해주세요 : ");
+          cout << "검색하고자 하는 일정을 입력해주세요 : ";
           scanf("%s", name);
           for (i = 0; i < MAX_NUM; i++){
                //strcmp는 문자열이 일치할때 0을 반환
                //0은 C언어에서 거짓을 의미
                //그러므로 ! 을 붙여 참으로 변경하여 실행
                if (!strcmp(name, ptr[i].name)){
-                    printf("일정 : %s ", ptr[i].name);
-                    printf("날짜 : %s \n", ptr[i].day);
-                    printf("  Data Found \n\n");
+                    cout << "일정: " << ptr[i].name;
+                    cout << "날짜:  \n" << ptr[i].day;
+                    cout << "  Data Found \n\n";
                     return 0;
                }
           }
-      printf("Not Found \n\n");
+      cout << "찾지 못했습니다. \n\n";
       return 0;
      }
      else{
-          printf("  No Data \n\n");
+          cout << "  데이터가 존재하지 않습니다. \n\n";
           return 0;
      }
 }
@@ -903,11 +912,11 @@ void printAll(User* ptr, int* num){
      int i = 0;
      if (*num > 0){
           for (i = 0; i < *num; i++){
-               printf("일정 : %s ", ptr[i].name);
-               printf("날짜 : %s \n", ptr[i].day);
+               cout << "일정 : " << ptr[i].name;
+               cout << "날짜 :  \n" << ptr[i].day;
           }
-          printf("  Data Print \n\n");
+          cout << " 일정 출력 \n\n";
      }
      else
-          printf("  No Data \n\n");
+          cout << "-> 데이터가 존재하지 않습니다. \n\n";
 }

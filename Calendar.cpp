@@ -292,6 +292,7 @@ void Select_Option(int&); // 옵션을 출력하고 입력받음
 void textcolor(int foreground, int background); //색깔추가기능 
 void gotoxy(int x, int y);
 bool SolarToLunar(lunar_t& lunar); // 양력 -> 음력
+void holiday(int year);
 
 class DayofYear
 {
@@ -474,10 +475,12 @@ void Select_Option(int& num) {
     gotoxy(60, 6);
     cout << "④ 달력날짜 변경";
     gotoxy(60, 7);
-    cout << "⑤ 종료 ";
+    cout << "⑤ 올해 공휴일 확인";
     gotoxy(60, 8);
-    cout << endl;
+    cout << "⑥ 종료 ";
     gotoxy(60, 9);
+    cout << endl;
+    gotoxy(60, 10); 
     textcolor(2, 0);
     cout << "옵션 번호: ";
     cin >> num;
@@ -538,7 +541,16 @@ void Select_Option(int& num) {
         output_calendar();
         Select_Option(num);
     }
-    else if (num == 5)
+    else if ( num == 5)
+	{
+		system("cls");
+        Cal_leap();
+        week = getweek(year, month);
+        output_calendar();
+        holiday(year);
+        Select_Option(num);
+	} 
+    else if (num == 6)
     {
         system("cls");
         cout << "\n프로그램을 종료합니다." << endl;
@@ -591,9 +603,7 @@ bool SolarToLunar(lunar_t& lunar)
     febdays(Year);
 
     if (Day < 1 || lunar_Month_days[Month - 1] < Day)
-    {
         return false;
-    }
 
     int ly, lm, ld;
     int m1, m2, mm, i, j;
@@ -929,4 +939,21 @@ void printAll(User* ptr, int* num){
      }
      else
           cout << "-> 일정이 존재하지 않습니다." << endl << "   일정을 추가해주십시오." << endl;
+}
+
+void holiday(int year)
+{
+	char from_holiday_txt[103];
+	FILE* file_pointer;
+	
+	file_pointer = fopen("holiday.txt", "r");
+	
+	cout <<"\n\n\n " << year;
+	while(fgets(from_holiday_txt,103,file_pointer)!=NULL)
+	{
+		cout << from_holiday_txt;
+		memset(from_holiday_txt,0,103);
+	}
+	
+	fclose(file_pointer);
 }

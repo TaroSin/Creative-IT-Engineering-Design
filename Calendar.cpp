@@ -1,7 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include <windows.h>
-#include <cstring>
+#include <string>
 using namespace std;
 
 /*  아래의 음력 데이터 :
@@ -259,6 +259,7 @@ static const char _info_array[203][12] =
     1, 5, 1, 2, 1, 2,    1, 2, 2, 2, 1, 2,
     1, 2, 1, 1, 2, 1,    1, 2, 2, 1, 2, 2,
 };
+
 typedef struct _lunar_info
 {
     unsigned short lunar_year;         // 음력변환후년도(양력과다를수있음)
@@ -266,6 +267,7 @@ typedef struct _lunar_info
     unsigned char lunar_day;                // 음력변환후일
     bool isyoondal;          // 윤달여부0:평달/1:윤달
 } lunar_t;
+
 int Month_days[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 int year, month, week;
 void input(); // 연도와 월을 입력받는 함수. 
@@ -277,10 +279,27 @@ void Select_Option(int&); // 옵션을 출력하고 입력받음
 void textcolor(int foreground, int background); //색깔추가기능 
 void gotoxy(int x, int y);
 bool SolarToLunar(lunar_t& lunar); // 양력 -> 음력
+
+class DayofYear
+{
+private:
+    int d_mon;
+    int d_day;
+    int t_mon;
+    int t_day;
+public:
+    void SetDday();
+    void SetToday();
+    int GetPastDay(int m, int d);
+    int GetLeftDay();
+    void ShowLeftDay();
+};
+
 int main()
 {
+   textcolor(15, 0);
     system("mode con cols=100 lines=30 | title Calendar");
-	input();
+    input();
     system("cls");
     week = getweek(year, month);
     Cal_leap();
@@ -291,9 +310,12 @@ int main()
 }
 
 void input() {
-    printf("년: ");
+   textcolor(9,0);
+   cout << "출력을 원하는 달력의 연도와 월을 입력하세요." << endl << endl;
+   textcolor(15, 0);
+    cout << "년: ";
     cin >> year;
-    printf("월: ");
+    cout << "월: ";
     cin >> month;
 }
 
@@ -324,26 +346,111 @@ void Cal_leap() {
         Month_days[1]++;
 }
 
+void DayofYear::SetDday()
+{
+    cout << "\n\n날짜를 입력하시오 (월 일): ";
+    int m, d;
+    cin >> m >> d;
+    while (m < 1 || m>12 || d < 1 || Month_days[m - 1] < d)
+    {
+        system("cls");
+        Cal_leap();
+        output_calendar();
+        cout << "\n\n*************다시 입력해주세요.*************" << endl;
+        cout << "\n\n날짜를 입력하시오 (월 일): ";
+        cin >> m >> d;
+    }
+
+    d_mon = m;
+    d_day = d;
+}
+
+void DayofYear::SetToday()
+{
+    cout << "\n\n기준이 될 날짜를 입력하세요 (월 일): ";
+    int tm, td;
+    cin >> tm >> td;
+    while (tm < 1 || tm>12 || td < 1 || Month_days[tm - 1] < td)
+    {
+        system("cls");
+        Cal_leap();
+        output_calendar();
+        cout << "\n\n*************다시 입력해주세요.*************" << endl;
+        cout << "\n\n기준이 될 날짜를 입력하세요 (월 일): ";
+        cin >> tm >> td;
+    }
+
+    t_mon = tm;
+    t_day = td;
+
+}
+
+// 1월 1일부터 m월 d일까지 날짜 합
+
+int DayofYear::GetPastDay(int m, int d)
+{
+    int i, past = 0;
+
+    // 1월부터 바로 전달까지 날짜 합
+
+    for (i = 1; i < m; i++)
+    {
+        past = past + Month_days[i - 1];
+    }
+
+    // 이번달 날짜 합
+
+    past = past + d;
+
+    return past;
+}
+
+int DayofYear::GetLeftDay()
+{
+    // 1월 1일부터 D-day까지의 날짜 합 - 1월 1일부터 오늘까지의 날짜 합
+
+    return GetPastDay(d_mon, d_day) - GetPastDay(t_mon, t_day);
+}
+
+void DayofYear::ShowLeftDay()
+{
+    int left = GetLeftDay();
+
+    // D-day가 오늘 날짜보다 앞설 경우
+    if (left < 0)
+    {
+        cout << "D-day가 오늘 날짜보다 앞설 수 없음" << endl;
+        return;
+    }
+
+
+    cout << "\n\nD-day " << left << endl;
+}
+
 void output_calendar() {
-    textcolor(11, 0);
-    cout << "  " << endl << "       " << year << "년 " << month << "월       " << endl << endl << "  " <<
-        "일 " << "월 " << "화 " << "수 " << "목 " << "금 " << "토  " << endl << "  ";
-    textcolor(15, 0);
+   textcolor(15, 0);
+   cout << "  " << endl << "      [" << year << "년 " << month << "월]      " << endl << endl << "  " <<
+        "일 " << "월 " << "화 " << "수 " << "목 " << "금 " << "토  " << endl << endl << "  ";
+   
     for (int i = 0; i < week; i++)
         cout << "   ";
-
+   
     for (int j = 1; j <= Month_days[month - 1]; j++)
     {
+       if(week % 7 == 0) textcolor(12, 0); // 일요일은 숫자 색을 빨간색으로  
+       else if(week % 7 == 6) textcolor(9, 0); // 토요일은 숫자 색을 파란색으로  
+       else textcolor(15, 0);
         printf("%2d ", j);
         if (week % 7 == 6)
-            cout << "  " << endl << "  ";
+            cout << "  " << endl << "  "; 
         week = (week + 1) % 7;
     }
     cout << endl;
+    textcolor(15, 0);
 }
 
 void Select_Option(int& num) {
-    gotoxy(59, 2);
+    gotoxy(59, 1);
     cout << "[원하는 옵션 선택]";
     gotoxy(60, 3);
     cout << "① 일정 추가";
@@ -362,34 +469,53 @@ void Select_Option(int& num) {
     gotoxy(60, 10);
     cout << "⑧ 종료";
     gotoxy(60, 11);
+    cout << endl;
+    gotoxy(60, 12);
+    textcolor(2, 0);
     cout << "옵션 변호: ";
     cin >> num;
+    textcolor(15,0);
+    
     if (num == 4)
     {
-    	system("cls");
+        system("cls");
         Cal_leap();
+        week = getweek(year, month);
         output_calendar();
         lunar_t lunar;
-        while(!SolarToLunar(lunar))
+        while (!SolarToLunar(lunar))
         {
-        	system("cls");
-			Cal_leap();
-        	output_calendar();
-			cout << "\n\n*************다시 입력해주세요.*************" << endl;
-		}
+            system("cls");
+            Cal_leap();
+            week = getweek(year, month);
+            output_calendar();
+            cout << "\n\n*************다시 입력해주세요.*************" << endl;
+        }
         Select_Option(num);
     }
     else if (num == 5)
     {
+        system("cls");
+        Cal_leap();
+        week = getweek(year, month);
+        output_calendar();
 
+        DayofYear dy;
+
+        dy.SetToday();
+
+        dy.SetDday();
+
+        dy.ShowLeftDay();
+        Select_Option(num);
     }
     else if (num == 6)
     {
-		
+
     }
     else if (num == 7) {
         system("cls");
-		input();
+        input();
         system("cls");
         week = getweek(year, month);
         Cal_leap();
@@ -405,12 +531,16 @@ void Select_Option(int& num) {
     else {
         while (num != 1 && num != 2 && num != 3 && num != 4 && num != 5 && num != 6 && num != 7 && num != 8)
         {
-        	system("cls");
-			Cal_leap();
-        	output_calendar();
-			cout << "\n\n*************다시 선택해주세요.*************" << endl; 
-			Select_Option(num);      	
-		}
+            system("cls");
+            Cal_leap();
+            week = getweek(year, month);
+            output_calendar();
+            textcolor(12, 0);
+            cout << "\n\n\n\n\n\n";
+            cout << "*************다시 선택해주세요.*************" << endl;
+            textcolor(15 ,0);
+            Select_Option(num);
+        }
     }
 }
 

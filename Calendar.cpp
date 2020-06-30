@@ -281,7 +281,7 @@ typedef struct _lunar_info
 } lunar_t;
 
 int Month_days[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-int Month_days2[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+int lunar_Month_days[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 int year, month, week;
 void input(); // 연도와 월을 입력받는 함수. 
 int getweek(int year, int month);
@@ -344,7 +344,7 @@ int getweek(int year, int month) {
 
 static void febdays(int y)  // 윤년 인자 받는 버전
 {
-    Month_days2[1] = 28;
+    lunar_Month_days[1] = 28;
 
     if (y % 4 == 0)
     {
@@ -353,11 +353,11 @@ static void febdays(int y)  // 윤년 인자 받는 버전
     }
     else
         return;
-    Month_days2[1] = 29;
+    lunar_Month_days[1] = 29;
 }
 void Cal_leap() {
     if (month == 2 && ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0))
-        Month_days[1]++;
+        lunar_Month_days[1]++;
 }
 
 void DayofYear::SetDday()
@@ -602,10 +602,8 @@ bool SolarToLunar(lunar_t& lunar)
 
     febdays(Year);
 
-    if (Day < 1 || Month_days2[Month - 1] < Day)
-    {
+    if (Day < 1 || lunar_Month_days[Month - 1] < Day)
         return false;
-    }
 
     int ly, lm, ld;
     int m1, m2, mm, i, j;
@@ -618,7 +616,7 @@ bool SolarToLunar(lunar_t& lunar)
     td2 = (sy - 1) * 365L + (sy - 1) / 4 - (sy - 1) / 100 + (sy - 1) / 400 + sd;
 
     for (i = 0; i < sm - 1; i++)
-        td2 += Month_days2[i];
+        td2 += lunar_Month_days[i];
     td = td2 - td1 + 1;
 
     for (i = 0; i <= sy - 1841; i++)
@@ -732,9 +730,9 @@ void schedule(int year)
      	  gotoxy(59, 1);
           cout << "[일정 관리 옵션]" << endl;
           gotoxy(60, 3);
-          cout << "① 일정추가" << endl;
+          cout << "① 일정 추가" << endl;
           gotoxy(60, 4);
-          cout << "② 일정삭제" << endl;
+          cout << "② 일정 삭제" << endl;
           gotoxy(60, 5);
           cout << "③ 일정 검색" << endl; 
           gotoxy(60, 6);
@@ -747,27 +745,36 @@ void schedule(int year)
           cin >> input;
           textcolor(15, 0);
        if (input == 1){
-               cout << "\n[추가할 일정] \n";
+       		   system("cls");
+               cout << endl << "[추가할 일정]" << endl << endl;
                insert(user, &person);
           }
           else if (input == 2){
-               cout << "\n[삭제할 일정] \n";
+          	   system("cls");
+               cout << endl << "[삭제할 일정]" << endl << endl;
                deleted(user, &person);
           }
           else if (input == 3){
-               cout << "\n[일정 검색] \n"; 
+          	   system("cls");
+               cout << endl << "[일정 검색]" << endl << endl;
                search(user, &person);
           }
           else if (input == 4){
-               cout << "\n[P일정 확인] \n";
+          	   system("cls");
+               cout << endl << "[일정 확인]" << endl << endl;
                printAll(user, &person);
           }
           else if (input == 5){
+          	   system("cls");
                saveFile(user, &person);
                break;
           }
-          else
-               cout << "\n에러! 다시 시도해주세요! \n\n";
+          else if(input > 5 || input < 1){
+          	   system("cls");
+          	   textcolor(12, 0);
+               cout << endl << endl << "다시 입력해주세요.";
+               textcolor(15, 0);
+             }
          }
 }
 
@@ -780,7 +787,7 @@ int saveFile(User* ptr, int* num){
           /* fopen함수는 오류발생시 NULL을 리턴하므로
           파일 개방 중 오류발생시 프로그램을 종료 */
           if (fp == NULL){
-               printf("File Open Error!\n");
+               cout << "File Open Error!" << endl;
                return 1;
           }
           //구조체 배열에 저장된 데이터를 파일에 저장
@@ -794,14 +801,14 @@ int saveFile(User* ptr, int* num){
           안내후 프로그램을 종료 */
           state = fclose(fp);
           if (state != 0){
-               printf("File Close Error!\n");
+               cout << "File Close Error!" << endl;
                return 1;
           }
-          printf("\n  Data Save \n");
+          cout << endl << "Data Save \n";
           return 0;
      }
      else{
-          printf("\n  Exit \n");
+          cout << "Exit \n";
           return 0;
      }
 }
@@ -812,7 +819,7 @@ int openFile(User* ptr, int* num){
      char temp;
      FILE* fp = fopen("Schedule.txt", "rt");
      if (fp == NULL){
-          printf("File Open Error!\n");
+          cout << "File Open Error!" << endl;
           return 1;
      }
      //파일에 저장된 데이터를 구조체 배열에 저장
@@ -838,16 +845,16 @@ void insert(User* ptr, int* num){
      //유저정보가 꽉 차지 않으면
      if (*num < MAX_NUM){
           printf("일정을 입력해주세요 : ");
-          scanf("%s", ptr[*num].name);
+          cin >> ptr[*num].name;
           printf("날짜를 입력해주세요 : ");
           cin >> ptr[*num].day;
 
           (*num)++;
-          cout << "  일정이 추가되었습니다. \n\n";
+          cout << endl << "일정이 추가되었습니다." << endl;
      }
      //유저 정보가 꽉 차면
      else
-          cout << "  일정이 꽉 찼습니다." << endl << "불필요한 일정을 제거해주십시오." << endl; 
+          cout << "일정이 꽉 찼습니다." << endl << "불필요한 일정을 제거해주십시오." << endl; 
     }
 //사용자의 정보를 삭제하는 함수
 int deleted(User* ptr, int* num){
@@ -862,8 +869,10 @@ int deleted(User* ptr, int* num){
                if (strcmp(name, ptr[i].name) == 0){
 
                     (*num)--;
-                    cout << "일정이 삭제되었습니다. \n\n";
-
+                    cout << endl << "일정이 삭제되었습니다." << endl;
+                    textcolor(12, 0);
+					cout << "삭제된 일정: " << ptr[i].name;
+					textcolor(15, 0);
                     //데이터가 가득 차지 않았다면
                     if (i != MAX_NUM - 1){
                          for (j = i; j < MAX_NUM; j++){
@@ -900,23 +909,22 @@ int search(User* ptr, int* num){
      //저장된 데이터가 있다면
      if (*num > 0){
           cout << "검색하고자 하는 일정을 입력해주세요 : ";
-          scanf("%s", name);
+          cin >> name;
           for (i = 0; i < MAX_NUM; i++){
                //strcmp는 문자열이 일치할때 0을 반환
                //0은 C언어에서 거짓을 의미
                //그러므로 ! 을 붙여 참으로 변경하여 실행
                if (!strcmp(name, ptr[i].name)){
-                    cout << "일정: " << ptr[i].name;
-                    cout << "날짜:  \n" << ptr[i].day;
-                    cout << "  Data Found \n\n";
+                    cout << endl << "일정: " << ptr[i].name << endl;
+                    cout << "날짜: " << ptr[i].day << endl;
                     return 0;
                }
           }
-      cout << "찾지 못했습니다. \n\n";
+      cout << endl << "찾지 못했습니다." << endl;
       return 0;
      }
      else{
-          cout << "  데이터가 존재하지 않습니다. \n\n";
+          cout << "-> 일정이 존재하지 않습니다." << endl << "   일정을 추가해주십시오." << endl;
           return 0;
      }
 }
@@ -925,13 +933,12 @@ void printAll(User* ptr, int* num){
      int i = 0;
      if (*num > 0){
           for (i = 0; i < *num; i++){
-               cout << "일정 : " << ptr[i].name;
-               cout << "날짜 :  \n" << ptr[i].day;
+               cout << "일정 : " << ptr[i].name << endl;
+               cout << "날짜 : " << ptr[i].day << endl;
           }
-          cout << " 일정 출력 \n\n";
      }
      else
-          cout << "-> 데이터가 존재하지 않습니다. \n\n";
+          cout << "-> 일정이 존재하지 않습니다." << endl << "   일정을 추가해주십시오." << endl;
 }
 
 void holiday(int year)

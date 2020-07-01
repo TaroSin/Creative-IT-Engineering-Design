@@ -781,7 +781,7 @@ void schedule(int year)
 //데이터를 파일에 저장하는 함수
 int saveFile(User* ptr, int* num){
 
-     if (*num > 0){
+     if (*num >= 0){
           int i, state;
           FILE* fp = fopen("Schedule.txt", "wt");
           /* fopen함수는 오류발생시 NULL을 리턴하므로
@@ -834,7 +834,7 @@ int openFile(User* ptr, int* num){
      안내후 프로그램을 종료 */
      state = fclose(fp);
      if (state != 0){
-          printf("File Close Error!\n");
+          cout << "File Close Error!" << endl;
           return 1;
      }
      return 0;
@@ -844,9 +844,9 @@ void insert(User* ptr, int* num){
 
      //일정정보가 꽉 차지 않으면
      if (*num < MAX_NUM){
-          printf("일정을 입력해주세요 : ");
+          cout << "일정을 입력해주세요 : ";
           cin >> ptr[*num].name;
-          printf("날짜를 입력해주세요 : ");
+          cout << "날짜를 입력해주세요 : ";
           cin >> ptr[*num].day;
 
           (*num)++;

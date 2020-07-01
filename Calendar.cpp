@@ -262,16 +262,17 @@ static const char _info_array[203][12] =
 
 typedef struct{
      char name[30];
+     char year[30];
      char day[30];
 }User;
 
 int saveFile(User* ptr, int* num);
 int openFile(User* ptr, int* num);
-void insert(User* ptr, int* num);
+void insert(User* ptr, int* num, int year);
 int deleted(User* ptr, int* num);
 int search(User* ptr, int* num);
 void printAll(User* ptr, int* num);
-void schedule(int year);
+void schedule();
 typedef struct _lunar_info
 {
     unsigned short lunar_year;         // 음력변환후년도(양력과다를수있음)
@@ -321,7 +322,7 @@ public:
 int main()
 {
 	textcolor(15, 0);
-    system("mode con cols=100 lines=30 | title Calendar");
+    system("mode con cols=100 lines=32 | title Calendar");
     input();
     system("cls");
     week = getweek(year, month);
@@ -501,7 +502,7 @@ void Select_Option(int& num) {
          Cal_leap();
          week = getweek(year, month);
          output_calendar();
-    	 schedule(year);
+    	 schedule();
     	 system("cls");
          Cal_leap();
          week = getweek(year, month);
@@ -896,7 +897,7 @@ bool LunarToSolar(int Year, int Month, int Day, bool Leaf, solar_t& solar)
     return true;
 }
 
-void schedule(int year)
+void schedule()
 {
 	 int input;
      User user[MAX_NUM]; //일정 정보를 저장할 구조체 배열
@@ -924,7 +925,7 @@ void schedule(int year)
        if (input == 1){
        		   system("cls");
                cout << endl << "[추가할 일정]" << endl << endl;
-               insert(user, &plan);
+               insert(user, &plan, year);
           }
           else if (input == 2){
           	   system("cls");
@@ -970,7 +971,7 @@ int saveFile(User* ptr, int* num){
           //구조체 배열에 저장된 데이터를 파일에 저장
           //줄바꿈으로 구분하여 저장
           for (i = 0; i < *num; i++){
-               fprintf(fp, "%s %s", ptr[i].name, ptr[i].day);
+               fprintf(fp, "%s %s %s", ptr[i].name, ptr[i].year, ptr[i].day);
                fputc('\n', fp);
           }
           /* fclose함수는 종료시 오류가 발생하면
@@ -1001,7 +1002,7 @@ int openFile(User* ptr, int* num){
      }
      //파일에 저장된 데이터를 구조체 배열에 저장
      while (1){
-          fscanf(fp, "%s %s", ptr[*num].name, ptr[*num].day);
+          fscanf(fp, "%s %s %s", ptr[*num].name, ptr[*num].year, ptr[*num].day);
           if (feof(fp) != 0)
                break;
           (*num)++;
@@ -1017,12 +1018,13 @@ int openFile(User* ptr, int* num){
      return 0;
 }
 //일정 정보를 삽입하는 함수
-void insert(User* ptr, int* num){
+void insert(User* ptr, int* num, int year){
 
      //일정정보가 꽉 차지 않으면
      if (*num < MAX_NUM){
           cout << "일정을 입력해주세요 : ";
           cin >> ptr[*num].name;
+          itoa(year, ptr[*num].year, 10);
           cout << "날짜를 입력해주세요 : ";
           cin >> ptr[*num].day;
 
@@ -1055,16 +1057,19 @@ int deleted(User* ptr, int* num){
                          for (j = i; j < MAX_NUM; j++){
                               //문자열이므로 strcpy를 사용하여 데이터 복사
                               strcpy(ptr[j].name, ptr[j + 1].name);
+                              strcpy(ptr[j].year, ptr[j + 1].year);
                               strcpy(ptr[j].day, ptr[j + 1].day);
                          }
                          //구조체 배열의 마지막을 NULL로 바꿈
                          *ptr[MAX_NUM - 1].name = NULL;
+                         *ptr[MAX_NUM - 1].year = NULL;
                          *ptr[MAX_NUM - 1].day = NULL;
                     }
                         //데이터가 가득 찼다면
                     else{
                          //구조체 배열의 마지막을 NULL로 바꿈
                          *ptr[MAX_NUM - 1].name = NULL;
+                         *ptr[MAX_NUM - 1].year = NULL;
                          *ptr[MAX_NUM - 1].day = NULL;
                     }
                return 0;
@@ -1093,6 +1098,7 @@ int search(User* ptr, int* num){
                //그러므로 ! 을 붙여 참으로 변경하여 실행
                if (!strcmp(name, ptr[i].name)){
                     cout << endl << "일정: " << ptr[i].name << endl;
+                    cout << "년도: " << ptr[i].year << endl;
                     cout << "날짜: " << ptr[i].day << endl;
                     return 0;
                }
@@ -1111,6 +1117,7 @@ void printAll(User* ptr, int* num){
      if (*num > 0){
           for (i = 0; i < *num; i++){
                cout << "일정 : " << ptr[i].name << endl;
+               cout << "연도 : " << ptr[i].year << endl;
                cout << "날짜 : " << ptr[i].day << endl;
           }
      }
@@ -1131,6 +1138,7 @@ void holiday(int year)
 	fp = fopen("holiday.txt", "r");
 	
 	cout << "\n\n\n " << year;
+	
 	while(fgets(from_holiday_txt,103,fp)!=NULL)
 	{
 		cout << from_holiday_txt;
@@ -1138,13 +1146,13 @@ void holiday(int year)
 	}
 	
 	cout << "\n\n 설날\n " << (int)solar1_1.month << "/" << (int)solar1_1.day << endl;
-	gotoxy(14,28); 
+	gotoxy(14,29); 
 	cout << "석가탄신일\n";
-	gotoxy(14,29);
+	gotoxy(14,30);
 	cout << (int)solar4_8.month << "/" << (int)solar4_8.day << endl;
-	gotoxy(30,28);
-	cout << "추석";
 	gotoxy(30,29);
+	cout << "추석";
+	gotoxy(30,30);
 	cout << (int)solar8_15.month << "/" << (int)solar8_15.day << endl;
 	
 	fclose(fp);

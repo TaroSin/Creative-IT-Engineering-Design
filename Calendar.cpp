@@ -279,9 +279,17 @@ typedef struct _lunar_info
     unsigned char lunar_day;                // 음력변환후일
     bool isyoondal;          // 윤달여부0:평달/1:윤달
 } lunar_t;
+typedef struct _solar_info
+{
+    unsigned short year;               // 양력변환후년도(음력과다를수있음)
+    unsigned char month;              // 양력변환후달
+    unsigned char day;                // 양력변환후일
+    unsigned char dayofweek;          // 주중요일을숫자로( 0:일, 1:월... 6:토)
+} solar_t;
 
 int Month_days[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 int lunar_Month_days[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+int solar_Month_days[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 int year, month, week;
 void input(); // 연도와 월을 입력받는 함수. 
 int getweek(int year, int month);
@@ -292,6 +300,7 @@ void Select_Option(int&); // 옵션을 출력하고 입력받음
 void textcolor(int foreground, int background); //색깔추가기능 
 void gotoxy(int x, int y);
 bool SolarToLunar(lunar_t& lunar); // 양력 -> 음력
+bool LunarToSolar(int Year, int Month, int Day, bool Leaf, solar_t& solar);
 void holiday(int year);
 
 class DayofYear
@@ -718,6 +727,174 @@ bool SolarToLunar(lunar_t& lunar)
 
     return true;
 }
+bool LunarToSolar(int Year, int Month, int Day, bool Leaf, solar_t& solar)
+{
+    if(Year < 1841 || 2043 < Year)
+        return false;
+ 
+    if(Month < 1 || 12 < Month)
+        return false;
+ 
+    int lyear, lmonth, lday, leapyes;
+    int syear, smonth, sday;
+    int mm, y1, y2, m1;
+    int i, j, k1, k2, leap, w;
+    long td, y;
+    lyear = Year;
+    lmonth = Month;
+    y1 = lyear - 1841;
+    m1 = lmonth - 1;
+    leapyes = 0;
+    
+    if( _info_array[y1][m1] > 2)
+        leapyes = Leaf;
+    if( leapyes == 1)
+    {
+        switch( _info_array[y1][m1] )
+        {
+            case 3 :
+            case 5 :
+                mm = 29;
+                break;
+            case 4 :
+            case 6 :
+                mm = 30;
+                break;
+        }
+    }
+    else
+    {
+        switch( _info_array[y1][m1] )
+        {
+            case 1 :
+            case 3 :
+            case 4 :
+                mm = 29;
+                break;
+            case 2 :
+            case 5 :
+            case 6 :
+                mm = 30;
+                break;
+        }
+    }
+
+    lday = Day;
+    td = 0;
+    for(i=0; i<y1; i++)
+    {
+        for(j=0; j<12; j++)
+        {
+            switch( _info_array[i][j] )
+            {
+                case 1 :
+                    td += 29;
+                    break;
+                case 2 :
+                    td += 30;
+                    break;
+                case 3 :
+                    td += 58;   // 29+29
+                    break;
+                case 4 :
+                    td += 59;   // 29+30
+                    break;
+                case 5 :
+                    td += 59;   // 30+29
+                    break;
+                case 6 :
+                    td += 60;   // 30+30
+                    break;
+            }
+        }
+    }
+
+    for (j=0; j<m1; j++)
+    {
+        switch( _info_array[y1][j] )
+        {
+            case 1 :
+                td +=29;
+                break;
+            case 2 :
+                td += 30;
+                break;
+            case 3 :
+                td += 58;   // 29+29
+                break;
+            case 4 :
+                td += 59;   // 29+30
+                break;
+            case 5 :
+                td += 59;   // 30+29
+                break;
+            case 6 :
+                td += 60;   // 30+30
+                break;
+        }
+    }
+
+    if( leapyes == 1 )
+    {
+        switch( _info_array[y1][m1] )
+        {
+            case 3 :
+            case 4 :
+                td += 29;
+                break;
+            case 5 :
+            case 6 :
+                td += 30;
+                break;
+        }
+    }
+
+    td += lday + 22;
+    // td : 1841년1월1일부터원하는날까지의전체날수의합
+
+    y1 = 1840;
+    do {
+        y1++;
+        leap = (y1 % 400 == 0) || (y1 % 100 != 0) && (y1 % 4 ==0);
+        if(leap)
+            y2 = 366;
+        else    
+            y2 = 365;
+        if(td <= y2)
+            break;
+        td -= y2;
+       } while(1);
+      
+    syear = y1;
+    solar_Month_days[1] = y2 - 337;
+    m1 = 0;
+    do
+    {
+        m1++;
+        if( td <= solar_Month_days[m1-1] )
+            break;
+        td -= solar_Month_days[m1-1];
+    } while(1);
+
+    smonth = m1;
+    sday = td;
+    y = syear - 1;
+    td = y * 365L + y/4 - y/100 + y/400;
+    for(i=0; i<smonth-1; i++) td += solar_Month_days[i];
+    td += sday;
+    w = td % 7;
+    i = (td + 4) % 10;
+    j = (td + 2) % 12;
+    k1 = (lyear + 6) % 10;
+    k2 = (lyear + 8) % 12;
+ 
+    solar.year = syear;
+    solar.month = smonth;
+    solar.day = sday;
+    solar.dayofweek = w;
+
+    return true;
+}
 
 void schedule(int year)
 {
@@ -943,17 +1120,32 @@ void printAll(User* ptr, int* num){
 
 void holiday(int year)
 {
+	solar_t solar1_1,solar4_8,solar8_15;
+	LunarToSolar(year,1,1,false,solar1_1);
+	LunarToSolar(year,4,8,false,solar4_8);
+	LunarToSolar(year,8,15,false,solar8_15);
+	
 	char from_holiday_txt[103];
-	FILE* file_pointer;
+	FILE* fp;
+
+	fp = fopen("holiday.txt", "r");
 	
-	file_pointer = fopen("holiday.txt", "r");
-	
-	cout <<"\n\n\n " << year;
-	while(fgets(from_holiday_txt,103,file_pointer)!=NULL)
+	cout << "\n\n\n " << year;
+	while(fgets(from_holiday_txt,103,fp)!=NULL)
 	{
 		cout << from_holiday_txt;
 		memset(from_holiday_txt,0,103);
 	}
 	
-	fclose(file_pointer);
+	cout << "\n\n 설날\n " << (int)solar1_1.month << "/" << (int)solar1_1.day << endl;
+	gotoxy(14,28); 
+	cout << "석가탄신일\n";
+	gotoxy(14,29);
+	cout << (int)solar4_8.month << "/" << (int)solar4_8.day << endl;
+	gotoxy(30,28);
+	cout << "추석";
+	gotoxy(30,29);
+	cout << (int)solar8_15.month << "/" << (int)solar8_15.day << endl;
+	
+	fclose(fp);
 }

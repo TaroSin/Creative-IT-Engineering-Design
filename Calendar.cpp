@@ -321,10 +321,13 @@ public:
 
 int main()
 {
-	textcolor(15, 0);
     system("mode con cols=100 lines=32 | title Calendar");
-    input();
-    system("cls");
+    struct tm* now;
+	time_t now_t;
+	time(&now_t);
+	now=localtime(&now_t);
+    year=now->tm_year+1900;
+    month=now->tm_mon+1;
     week = getweek(year, month);
     Cal_leap();
     output_calendar();

@@ -279,9 +279,20 @@ typedef struct _lunar_info
     unsigned char lunar_day;                // 음력변환후일
     bool isyoondal;          // 윤달여부0:평달/1:윤달
 } lunar_t;
+typedef struct _solar_info
+{
+    unsigned short year;               // 양력변환후년도(음력과다를수있음)
+    unsigned char month;              // 양력변환후달
+    unsigned char day;                // 양력변환후일
+    unsigned char dayofweek;          // 주중요일을숫자로( 0:일, 1:월... 6:토)
+} solar_t;
 
 int Month_days[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 int lunar_Month_days[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+<<<<<<< HEAD
+=======
+int solar_Month_days[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+>>>>>>> 8d4196fd4152b31ee7d3f517c0553e4461c834d5
 int year, month, week;
 void input(); // 연도와 월을 입력받는 함수. 
 int getweek(int year, int month);
@@ -292,6 +303,8 @@ void Select_Option(int&); // 옵션을 출력하고 입력받음
 void textcolor(int foreground, int background); //색깔추가기능 
 void gotoxy(int x, int y);
 bool SolarToLunar(lunar_t& lunar); // 양력 -> 음력
+bool LunarToSolar(int Year, int Month, int Day, bool Leaf, solar_t& solar);
+void holiday(int year);
 
 class DayofYear
 {
@@ -474,10 +487,12 @@ void Select_Option(int& num) {
     gotoxy(60, 6);
     cout << "④ 달력날짜 변경";
     gotoxy(60, 7);
-    cout << "⑤ 종료 ";
+    cout << "⑤ 올해 공휴일 확인";
     gotoxy(60, 8);
-    cout << endl;
+    cout << "⑥ 종료 ";
     gotoxy(60, 9);
+    cout << endl;
+    gotoxy(60, 10); 
     textcolor(2, 0);
     cout << "옵션 번호: ";
     cin >> num;
@@ -538,7 +553,16 @@ void Select_Option(int& num) {
         output_calendar();
         Select_Option(num);
     }
-    else if (num == 5)
+    else if ( num == 5)
+	{
+		system("cls");
+        Cal_leap();
+        week = getweek(year, month);
+        output_calendar();
+        holiday(year);
+        Select_Option(num);
+	} 
+    else if (num == 6)
     {
         system("cls");
         cout << "\n프로그램을 종료합니다." << endl;
@@ -591,9 +615,11 @@ bool SolarToLunar(lunar_t& lunar)
     febdays(Year);
 
     if (Day < 1 || lunar_Month_days[Month - 1] < Day)
+<<<<<<< HEAD
     {
+=======
+>>>>>>> 8d4196fd4152b31ee7d3f517c0553e4461c834d5
         return false;
-    }
 
     int ly, lm, ld;
     int m1, m2, mm, i, j;
@@ -708,13 +734,181 @@ bool SolarToLunar(lunar_t& lunar)
 
     return true;
 }
+bool LunarToSolar(int Year, int Month, int Day, bool Leaf, solar_t& solar)
+{
+    if(Year < 1841 || 2043 < Year)
+        return false;
+ 
+    if(Month < 1 || 12 < Month)
+        return false;
+ 
+    int lyear, lmonth, lday, leapyes;
+    int syear, smonth, sday;
+    int mm, y1, y2, m1;
+    int i, j, k1, k2, leap, w;
+    long td, y;
+    lyear = Year;
+    lmonth = Month;
+    y1 = lyear - 1841;
+    m1 = lmonth - 1;
+    leapyes = 0;
+    
+    if( _info_array[y1][m1] > 2)
+        leapyes = Leaf;
+    if( leapyes == 1)
+    {
+        switch( _info_array[y1][m1] )
+        {
+            case 3 :
+            case 5 :
+                mm = 29;
+                break;
+            case 4 :
+            case 6 :
+                mm = 30;
+                break;
+        }
+    }
+    else
+    {
+        switch( _info_array[y1][m1] )
+        {
+            case 1 :
+            case 3 :
+            case 4 :
+                mm = 29;
+                break;
+            case 2 :
+            case 5 :
+            case 6 :
+                mm = 30;
+                break;
+        }
+    }
+
+    lday = Day;
+    td = 0;
+    for(i=0; i<y1; i++)
+    {
+        for(j=0; j<12; j++)
+        {
+            switch( _info_array[i][j] )
+            {
+                case 1 :
+                    td += 29;
+                    break;
+                case 2 :
+                    td += 30;
+                    break;
+                case 3 :
+                    td += 58;   // 29+29
+                    break;
+                case 4 :
+                    td += 59;   // 29+30
+                    break;
+                case 5 :
+                    td += 59;   // 30+29
+                    break;
+                case 6 :
+                    td += 60;   // 30+30
+                    break;
+            }
+        }
+    }
+
+    for (j=0; j<m1; j++)
+    {
+        switch( _info_array[y1][j] )
+        {
+            case 1 :
+                td +=29;
+                break;
+            case 2 :
+                td += 30;
+                break;
+            case 3 :
+                td += 58;   // 29+29
+                break;
+            case 4 :
+                td += 59;   // 29+30
+                break;
+            case 5 :
+                td += 59;   // 30+29
+                break;
+            case 6 :
+                td += 60;   // 30+30
+                break;
+        }
+    }
+
+    if( leapyes == 1 )
+    {
+        switch( _info_array[y1][m1] )
+        {
+            case 3 :
+            case 4 :
+                td += 29;
+                break;
+            case 5 :
+            case 6 :
+                td += 30;
+                break;
+        }
+    }
+
+    td += lday + 22;
+    // td : 1841년1월1일부터원하는날까지의전체날수의합
+
+    y1 = 1840;
+    do {
+        y1++;
+        leap = (y1 % 400 == 0) || (y1 % 100 != 0) && (y1 % 4 ==0);
+        if(leap)
+            y2 = 366;
+        else    
+            y2 = 365;
+        if(td <= y2)
+            break;
+        td -= y2;
+       } while(1);
+      
+    syear = y1;
+    solar_Month_days[1] = y2 - 337;
+    m1 = 0;
+    do
+    {
+        m1++;
+        if( td <= solar_Month_days[m1-1] )
+            break;
+        td -= solar_Month_days[m1-1];
+    } while(1);
+
+    smonth = m1;
+    sday = td;
+    y = syear - 1;
+    td = y * 365L + y/4 - y/100 + y/400;
+    for(i=0; i<smonth-1; i++) td += solar_Month_days[i];
+    td += sday;
+    w = td % 7;
+    i = (td + 4) % 10;
+    j = (td + 2) % 12;
+    k1 = (lyear + 6) % 10;
+    k2 = (lyear + 8) % 12;
+ 
+    solar.year = syear;
+    solar.month = smonth;
+    solar.day = sday;
+    solar.dayofweek = w;
+
+    return true;
+}
 
 void schedule(int year)
 {
 	 int input;
-     User user[MAX_NUM]; //사용자 정보를 저장할 구조체 배열
-     int person = 0; //저장된 user수
-     openFile(user, &person);//저장된 데이터를 불러오는 함수
+     User user[MAX_NUM]; //일정 정보를 저장할 구조체 배열
+     int plan = 0; //저장된 일정수
+     openFile(user, &plan);//저장된 데이터를 불러오는 함수
      //메뉴 선택
      while (1){
      	  system("cls");
@@ -724,9 +918,9 @@ void schedule(int year)
 		  gotoxy(59, 1);
           cout << "[일정 관리 옵션]" << endl;
           gotoxy(60, 3);
-          cout << "① 일정추가" << endl;
+          cout << "① 일정 추가" << endl;
           gotoxy(60, 4);
-          cout << "② 일정삭제" << endl;
+          cout << "② 일정 삭제" << endl;
           gotoxy(60, 5);
           cout << "③ 일정 검색" << endl; 
           gotoxy(60, 6);
@@ -739,6 +933,7 @@ void schedule(int year)
           cin >> input;
           textcolor(15, 0);
        if (input == 1){
+<<<<<<< HEAD
                cout << "\n[추가할 일정] \n";
                insert(user, &person);
 			   for(int j=3;j>0;j--)
@@ -773,11 +968,33 @@ void schedule(int year)
 				   cout << j << "초 후 일정관리화면으로 돌아갑니다." <<endl;
 				   Sleep(1000);	   	
 			   }
+=======
+       		   system("cls");
+               cout << endl << "[추가할 일정]" << endl << endl;
+               insert(user, &plan);
+          }
+          else if (input == 2){
+          	   system("cls");
+               cout << endl << "[삭제할 일정]" << endl << endl;
+               deleted(user, &plan);
+          }
+          else if (input == 3){
+          	   system("cls");
+               cout << endl << "[일정 검색]" << endl << endl;
+               search(user, &plan);
+          }
+          else if (input == 4){
+          	   system("cls");
+               cout << endl << "[일정 확인]" << endl << endl;
+               printAll(user, &plan);
+>>>>>>> 8d4196fd4152b31ee7d3f517c0553e4461c834d5
           }
           else if (input == 5){
-               saveFile(user, &person);
+          	   system("cls");
+               saveFile(user, &plan);
                break;
           }
+<<<<<<< HEAD
           else
           {
           	   cout << "\n에러! 다시 시도해주세요! \n\n";
@@ -788,19 +1005,27 @@ void schedule(int year)
 			   }
 		  }
 
+=======
+          else if(input > 5 || input < 1){
+          	   system("cls");
+          	   textcolor(12, 0);
+               cout << endl << endl << "다시 입력해주세요.";
+               textcolor(15, 0);
+             }
+>>>>>>> 8d4196fd4152b31ee7d3f517c0553e4461c834d5
          }
 }
 
 //데이터를 파일에 저장하는 함수
 int saveFile(User* ptr, int* num){
 
-     if (*num > 0){
+     if (*num >= 0){
           int i, state;
           FILE* fp = fopen("Schedule.txt", "wt");
           /* fopen함수는 오류발생시 NULL을 리턴하므로
           파일 개방 중 오류발생시 프로그램을 종료 */
           if (fp == NULL){
-               printf("File Open Error!\n");
+               cout << "File Open Error!" << endl;
                return 1;
           }
           //구조체 배열에 저장된 데이터를 파일에 저장
@@ -814,14 +1039,14 @@ int saveFile(User* ptr, int* num){
           안내후 프로그램을 종료 */
           state = fclose(fp);
           if (state != 0){
-               printf("File Close Error!\n");
+               cout << "File Close Error!" << endl;
                return 1;
           }
-          printf("\n  Data Save \n");
+          cout << endl << "Data Save \n";
           return 0;
      }
      else{
-          printf("\n  Exit \n");
+          cout << "Exit \n";
           return 0;
      }
 }
@@ -832,7 +1057,7 @@ int openFile(User* ptr, int* num){
      char temp;
      FILE* fp = fopen("Schedule.txt", "rt");
      if (fp == NULL){
-          printf("File Open Error!\n");
+          cout << "File Open Error!" << endl;
           return 1;
      }
      //파일에 저장된 데이터를 구조체 배열에 저장
@@ -847,33 +1072,33 @@ int openFile(User* ptr, int* num){
      안내후 프로그램을 종료 */
      state = fclose(fp);
      if (state != 0){
-          printf("File Close Error!\n");
+          cout << "File Close Error!" << endl;
           return 1;
      }
      return 0;
 }
-//사용자의 정보를 삽입하는 함수
+//일정 정보를 삽입하는 함수
 void insert(User* ptr, int* num){
 
-     //유저정보가 꽉 차지 않으면
+     //일정정보가 꽉 차지 않으면
      if (*num < MAX_NUM){
-          printf("일정을 입력해주세요 : ");
-          scanf("%s", ptr[*num].name);
-          printf("날짜를 입력해주세요 : ");
+          cout << "일정을 입력해주세요 : ";
+          cin >> ptr[*num].name;
+          cout << "날짜를 입력해주세요 : ";
           cin >> ptr[*num].day;
 
           (*num)++;
-          cout << "  일정이 추가되었습니다. \n\n";
+          cout << endl << "일정이 추가되었습니다." << endl;
      }
-     //유저 정보가 꽉 차면
+     //일정 정보가 꽉 차면
      else
-          cout << "  일정이 꽉 찼습니다." << endl << "불필요한 일정을 제거해주십시오." << endl; 
+          cout << "일정이 꽉 찼습니다." << endl << "불필요한 일정을 제거해주십시오." << endl; 
     }
-//사용자의 정보를 삭제하는 함수
+//일정 정보를 삭제하는 함수
 int deleted(User* ptr, int* num){
      char name[30];
      int i, j;
-     //유저 정보가 한개라도 남아있으면
+     //일정 정보가 한개라도 남아있으면
      if (*num > 0){
           cout << "삭제하고자하는 일정을 입력해주세요 : ";
           cin >> name; 
@@ -882,8 +1107,10 @@ int deleted(User* ptr, int* num){
                if (strcmp(name, ptr[i].name) == 0){
 
                     (*num)--;
-                    cout << "일정이 삭제되었습니다. \n\n";
-
+                    cout << endl << "일정이 삭제되었습니다." << endl;
+                    textcolor(12, 0);
+					cout << "삭제된 일정: " << ptr[i].name;
+					textcolor(15, 0);
                     //데이터가 가득 차지 않았다면
                     if (i != MAX_NUM - 1){
                          for (j = i; j < MAX_NUM; j++){
@@ -907,48 +1134,85 @@ int deleted(User* ptr, int* num){
           cout << "찾지 못했습니다. \n\n";
           return 0;
      }
-     //저장된 유저 정보가 없다면
+     //저장된 일정이 없다면
      else{
           cout << "-> 일정이 존재하지 않습니다. \n\n";
           return 0;
      }
 }
-//사용자의 정보를 검색하는 함수
+//일정을 검색하는 함수
 int search(User* ptr, int* num){
      char name[30];
      int i;
      //저장된 데이터가 있다면
      if (*num > 0){
           cout << "검색하고자 하는 일정을 입력해주세요 : ";
-          scanf("%s", name);
+          cin >> name;
           for (i = 0; i < MAX_NUM; i++){
                //strcmp는 문자열이 일치할때 0을 반환
                //0은 C언어에서 거짓을 의미
                //그러므로 ! 을 붙여 참으로 변경하여 실행
                if (!strcmp(name, ptr[i].name)){
-                    cout << "일정: " << ptr[i].name;
-                    cout << "날짜:  \n" << ptr[i].day;
-                    cout << "  Data Found \n\n";
+                    cout << endl << "일정: " << ptr[i].name << endl;
+                    cout << "날짜: " << ptr[i].day << endl;
                     return 0;
                }
           }
-      cout << "찾지 못했습니다. \n\n";
+      cout << endl << "찾지 못했습니다." << endl;
       return 0;
      }
      else{
-          cout << "  데이터가 존재하지 않습니다. \n\n";
+          cout << "-> 일정이 존재하지 않습니다." << endl << "   일정을 추가해주십시오." << endl;
           return 0;
      }
 }
-//저장된 모든 이름과 전화번호 정보를 출력하는 함수
+//저장된 모든 일정과 날짜 정보를 출력하는 함수
 void printAll(User* ptr, int* num){
      int i = 0;
      if (*num > 0){
+<<<<<<< HEAD
 		  for (i = 0; i < *num; i++){
                cout << " 일정 : " << ptr[i].name;
                cout << " 날짜 : " << ptr[i].day << endl; 
+=======
+          for (i = 0; i < *num; i++){
+               cout << "일정 : " << ptr[i].name << endl;
+               cout << "날짜 : " << ptr[i].day << endl;
+>>>>>>> 8d4196fd4152b31ee7d3f517c0553e4461c834d5
           }
      }
      else
-          cout << "-> 데이터가 존재하지 않습니다. \n\n";
+          cout << "-> 일정이 존재하지 않습니다." << endl << "   일정을 추가해주십시오." << endl;
+}
+
+void holiday(int year)
+{
+	solar_t solar1_1,solar4_8,solar8_15;
+	LunarToSolar(year,1,1,false,solar1_1);
+	LunarToSolar(year,4,8,false,solar4_8);
+	LunarToSolar(year,8,15,false,solar8_15);
+	
+	char from_holiday_txt[103];
+	FILE* fp;
+
+	fp = fopen("holiday.txt", "r");
+	
+	cout << "\n\n\n " << year;
+	while(fgets(from_holiday_txt,103,fp)!=NULL)
+	{
+		cout << from_holiday_txt;
+		memset(from_holiday_txt,0,103);
+	}
+	
+	cout << "\n\n 설날\n " << (int)solar1_1.month << "/" << (int)solar1_1.day << endl;
+	gotoxy(14,28); 
+	cout << "석가탄신일\n";
+	gotoxy(14,29);
+	cout << (int)solar4_8.month << "/" << (int)solar4_8.day << endl;
+	gotoxy(30,28);
+	cout << "추석";
+	gotoxy(30,29);
+	cout << (int)solar8_15.month << "/" << (int)solar8_15.day << endl;
+	
+	fclose(fp);
 }

@@ -1131,7 +1131,7 @@ void holiday(int year)
 	LunarToSolar(year,1,1,false,solar1_1);
 	LunarToSolar(year,4,8,false,solar4_8);
 	LunarToSolar(year,8,15,false,solar8_15);
-	
+
 	char from_holiday_txt[103];
 	FILE* fp;
 
@@ -1145,9 +1145,12 @@ void holiday(int year)
 		memset(from_holiday_txt,0,103);
 	}
 	
-	cout << "\n\n 설날\n " << (int)solar1_1.month << "/" << (int)solar1_1.day << endl;
+	gotoxy(1,29);
+	cout << "설날";
+	gotoxy(1,30);
+	cout << (int)solar1_1.month << "/" << (int)solar1_1.day << endl;
 	gotoxy(14,29); 
-	cout << "석가탄신일\n";
+	cout << "석가탄신일";
 	gotoxy(14,30);
 	cout << (int)solar4_8.month << "/" << (int)solar4_8.day << endl;
 	gotoxy(30,29);

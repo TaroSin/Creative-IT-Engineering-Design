@@ -722,9 +722,9 @@ bool SolarToLunar(lunar_t& lunar)
 void schedule(int year)
 {
 	 int input;
-     User user[MAX_NUM]; //사용자 정보를 저장할 구조체 배열
-     int person = 0; //저장된 user수
-     openFile(user, &person);//저장된 데이터를 불러오는 함수
+     User user[MAX_NUM]; //일정 정보를 저장할 구조체 배열
+     int plan = 0; //저장된 일정수
+     openFile(user, &plan);//저장된 데이터를 불러오는 함수
      //메뉴 선택
      while (1){
      	  gotoxy(59, 1);
@@ -747,26 +747,26 @@ void schedule(int year)
        if (input == 1){
        		   system("cls");
                cout << endl << "[추가할 일정]" << endl << endl;
-               insert(user, &person);
+               insert(user, &plan);
           }
           else if (input == 2){
           	   system("cls");
                cout << endl << "[삭제할 일정]" << endl << endl;
-               deleted(user, &person);
+               deleted(user, &plan);
           }
           else if (input == 3){
           	   system("cls");
                cout << endl << "[일정 검색]" << endl << endl;
-               search(user, &person);
+               search(user, &plan);
           }
           else if (input == 4){
           	   system("cls");
                cout << endl << "[일정 확인]" << endl << endl;
-               printAll(user, &person);
+               printAll(user, &plan);
           }
           else if (input == 5){
           	   system("cls");
-               saveFile(user, &person);
+               saveFile(user, &plan);
                break;
           }
           else if(input > 5 || input < 1){
@@ -839,10 +839,10 @@ int openFile(User* ptr, int* num){
      }
      return 0;
 }
-//사용자의 정보를 삽입하는 함수
+//일정 정보를 삽입하는 함수
 void insert(User* ptr, int* num){
 
-     //유저정보가 꽉 차지 않으면
+     //일정정보가 꽉 차지 않으면
      if (*num < MAX_NUM){
           printf("일정을 입력해주세요 : ");
           cin >> ptr[*num].name;
@@ -852,15 +852,15 @@ void insert(User* ptr, int* num){
           (*num)++;
           cout << endl << "일정이 추가되었습니다." << endl;
      }
-     //유저 정보가 꽉 차면
+     //일정 정보가 꽉 차면
      else
           cout << "일정이 꽉 찼습니다." << endl << "불필요한 일정을 제거해주십시오." << endl; 
     }
-//사용자의 정보를 삭제하는 함수
+//일정 정보를 삭제하는 함수
 int deleted(User* ptr, int* num){
      char name[30];
      int i, j;
-     //유저 정보가 한개라도 남아있으면
+     //일정 정보가 한개라도 남아있으면
      if (*num > 0){
           cout << "삭제하고자하는 일정을 입력해주세요 : ";
           cin >> name; 
@@ -896,13 +896,13 @@ int deleted(User* ptr, int* num){
           cout << "찾지 못했습니다. \n\n";
           return 0;
      }
-     //저장된 유저 정보가 없다면
+     //저장된 일정이 없다면
      else{
           cout << "-> 일정이 존재하지 않습니다. \n\n";
           return 0;
      }
 }
-//사용자의 정보를 검색하는 함수
+//일정을 검색하는 함수
 int search(User* ptr, int* num){
      char name[30];
      int i;
@@ -928,7 +928,7 @@ int search(User* ptr, int* num){
           return 0;
      }
 }
-//저장된 모든 이름과 전화번호 정보를 출력하는 함수
+//저장된 모든 일정과 날짜 정보를 출력하는 함수
 void printAll(User* ptr, int* num){
      int i = 0;
      if (*num > 0){

@@ -341,7 +341,7 @@ int main()
 
 void input() {
 	textcolor(9,0);
-	cout << endl << " 출력을 원하는 달력의 연도와 월을 입력하세요." << endl << endl;
+	cout << endl << endl << " 출력을 원하는 달력의 연도와 월을 입력하세요." << endl << endl;
 	textcolor(15, 0);
     cout << " 년: ";
     cin >> year;
@@ -411,7 +411,7 @@ void DayofYear::SetDdayHoliy(int year)
     LunarToSolar(year, 4, 8, false, solar4_8);
     LunarToSolar(year, 8, 15, false, solar8_15);
 	int hm, hd;
-	cout << "\n\n공휴일을 입력하세요 (월 일): ";
+	cout << "\n 공휴일을 입력하세요 (월 일): ";
 	cin >> hm >> hd;
 	
     while (!((hm==1&&hd==1)||(hm==3&&hd==1)||(hm==5&&hd==5)||(hm==6&&hd==6)||(hm==8&&hd==15)||
@@ -422,11 +422,13 @@ void DayofYear::SetDdayHoliy(int year)
     		
 			fp = fopen("holiday.txt", "r");
     		
+    		textcolor(12, 0);
     		cout << "\n\n " << year;
     		while (fgets(from_holiday_txt, 103, fp) != NULL)
     		{
         		cout << from_holiday_txt;
         		memset(from_holiday_txt, 0, 103);
+        		textcolor(15, 0);
     		}
 
 			fclose(fp);
@@ -448,22 +450,22 @@ void DayofYear::SetDdayHoliy(int year)
     		{
     			cout << "\n\n*************범위를 벗어났습니다.*************" << endl;
         		cout << "\n*************다시 입력해주세요.*************" << endl;
-        		cout << "\n\n공휴일을 입력하세요 (월 일): ";
+        		cout << "\n\n 공휴일을 입력하세요 (월 일): ";
         		cin >> hm >> hd;
         		return;
 			}
 			
-    		cout << "\n\n*************공휴일이 아닙니다.*************" << endl;
-        	cout << "\n*************다시 입력해주세요.*************" << endl;
-        	cout << "\n\n공휴일을 입력하세요 (월 일): ";
+    		cout << "\n\n************* 공휴일이 아닙니다. *************" << endl;
+        	cout << "************* 다시 입력해주세요. *************" << endl;
+        	cout << "\n 공휴일을 입력하세요 (월 일): ";
         	cin >> hm >> hd;
 		}
 	d_mon = hm;
     d_day = hd;
 }
 void DayofYear::SetToday()
-{
-    cout << "\n\n\n 기준이 될 날짜를 입력하세요 (월 일): ";
+{ 
+    cout << "\n 기준이 될 날짜를 입력하세요 (월 일): ";
     int tm, td;
     cin >> tm >> td;
     while (tm < 1 || tm>12 || td < 1 || Month_days[tm - 1] < td)
@@ -473,7 +475,7 @@ void DayofYear::SetToday()
         week = getweek(year, month);
         output_calendar();
         cout << "\n\n*************다시 입력해주세요.*************" << endl;
-        cout << "\n\n\n 기준이 될 날짜를 입력하세요 (월 일): ";
+        cout << "\n 기준이 될 날짜를 입력하세요 (월 일): ";
         cin >> tm >> td;
     }
 
@@ -516,11 +518,12 @@ void DayofYear::ShowLeftDay()
     // D-day가 오늘 날짜보다 앞설 경우
     if (left < 0)
     {
-        cout << "D-day가 오늘 날짜보다 앞설 수 없음" << endl;
+        cout << endl << " D-day가 오늘 날짜보다 앞설 수 없음" << endl;
         return;
     }
-
+	textcolor(14, 0); 
     cout << "\n\n D-day " << left << endl;
+    textcolor(15 ,0);
 } 
 
 void output_calendar() {
@@ -1255,15 +1258,15 @@ void dday()
     openFile(user, &plan);//저장된 데이터를 불러오는 함수
     //메뉴 선택
     while (1) {
-        gotoxy(59, 1);
+        gotoxy(45, 2);
         cout << "[날짜 계산]" << endl;
-        gotoxy(60, 3);
+        gotoxy(46, 4);
         cout << "① 공휴일 D-day " << endl;
-        gotoxy(60, 4);
+        gotoxy(46, 5);
         cout << "② D-day " << endl;
-        gotoxy(60, 5);
+        gotoxy(46, 6);
         cout << "③ 나가기 " << endl;
-        gotoxy(60, 9);
+        gotoxy(46, 8);
         textcolor(2, 0);
         cout << "옵션 번호: ";
         cin >> input;
@@ -1277,6 +1280,7 @@ void dday()
         else if (input == 2) {
             system("cls");
             DayofYear dy;
+            cout << endl << endl << " [ D-DAY 계산 ]" << endl;
             dy.SetToday();
             dy.SetDday();
             dy.ShowLeftDay();
@@ -1305,12 +1309,14 @@ void openHoliDay(int year) {
     
     FILE* fp;
     fp = fopen("holiday.txt", "r");
- 
+    
+ 	textcolor(12, 0);
     cout << "\n\n " << year;
     while (fgets(from_holiday_txt, 103, fp) != NULL)
     {
         cout << from_holiday_txt;
         memset(from_holiday_txt, 0, 103);
+        textcolor(15, 0);
     }
 
 	fclose(fp);
@@ -1327,6 +1333,7 @@ void openHoliDay(int year) {
     cout << "추석";
     gotoxy(30, 18);
     cout << (int)solar8_15.month << "/" << (int)solar8_15.day << endl;
+    cout << "_______________________________________" << endl;
     
 	day.SetDdayHoliy(year);
     day.SetToday();

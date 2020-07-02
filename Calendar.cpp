@@ -341,11 +341,11 @@ int main()
 
 void input() {
 	textcolor(9,0);
-	cout << endl << "출력을 원하는 달력의 연도와 월을 입력하세요." << endl << endl;
+	cout << endl << " 출력을 원하는 달력의 연도와 월을 입력하세요." << endl << endl;
 	textcolor(15, 0);
-    cout << "년: ";
+    cout << " 년: ";
     cin >> year;
-    cout << "월: ";
+    cout << " 월: ";
     cin >> month;
 }
 
@@ -384,7 +384,7 @@ void Cal_leap() {
 
 void DayofYear::SetDday()
 {
-    cout << "\n\n날짜를 입력하시오 (월 일): ";
+    cout << "\n 날짜를 입력하시오 (월 일): ";
     int m, d;
     cin >> m >> d;
     while (m < 1 || m>12 || d < 1 || Month_days[m - 1] < d)
@@ -394,7 +394,7 @@ void DayofYear::SetDday()
         week = getweek(year, month);
         output_calendar();
         cout << "\n\n*************다시 입력해주세요.*************" << endl;
-        cout << "\n\n날짜를 입력하시오 (월 일): ";
+        cout << "\n 날짜를 입력하시오 (월 일): ";
         cin >> m >> d;
     }
 
@@ -463,7 +463,7 @@ void DayofYear::SetDdayHoliy(int year)
 }
 void DayofYear::SetToday()
 {
-    cout << "\n\n기준이 될 날짜를 입력하세요 (월 일): ";
+    cout << "\n\n\n 기준이 될 날짜를 입력하세요 (월 일): ";
     int tm, td;
     cin >> tm >> td;
     while (tm < 1 || tm>12 || td < 1 || Month_days[tm - 1] < td)
@@ -473,7 +473,7 @@ void DayofYear::SetToday()
         week = getweek(year, month);
         output_calendar();
         cout << "\n\n*************다시 입력해주세요.*************" << endl;
-        cout << "\n\n기준이 될 날짜를 입력하세요 (월 일): ";
+        cout << "\n\n\n 기준이 될 날짜를 입력하세요 (월 일): ";
         cin >> tm >> td;
     }
 
@@ -520,27 +520,39 @@ void DayofYear::ShowLeftDay()
         return;
     }
 
-
-    cout << "\n\nD-day " << left << endl;
-}
+    cout << "\n\n D-day " << left << endl;
+} 
 
 void output_calendar() {
     textcolor(15, 0);
-    cout << "  " << endl << "      [" << year << "년 " << month << "월]      " << endl << endl << "  " <<
-        "일 " << "월 " << "화 " << "수 " << "목 " << "금 " << "토  " << endl << endl << "  ";
+    cout << "  " << endl << endl << "            << " << year << " / " << month << " >>      " << endl << endl << "     ";
+    textcolor(0, 12);
+	cout << "SUN";
+	textcolor(0, 7);
+	cout << " MON " << "TUE " << "WED " << "THU " << "FRI ";
+	textcolor(0, 9);
+	cout << "SAT";
+	textcolor(15, 0);
+	cout << endl << endl;
+	
+	if(week %7 != 6) cout << "     ";
+	else cout << "  ";
 
     for (int i = 0; i <= week; i++)
     {
-    	if(week==6) break; 
-    	cout << "   ";
+       if(week==6) break; 
+       cout << "    ";
     }
 
     for (int j = 1; j <= Month_days[month - 1]; j++)
     {
-        if (week % 7 == 5) textcolor(9, 0); // 토요일은 숫자 색을 파으로  
-        else if (week % 7 == 6) textcolor(12, 0); // 일요일은 숫자 색을 빨색으로  
+        if (week % 7 == 5) textcolor(9, 0); // 토요일은 숫자 색을 파란색으로 
+        else if (week % 7 == 6) {
+			textcolor(12, 0); // 일요일은 숫자 색을 빨간색으로  
+			cout << "   ";
+		}
         else textcolor(15, 0);
-        printf("%2d ", j);
+        printf("%3d ", j);
         if ((week+1) % 7 == 6)
             cout << "  " << endl << "  ";
         week = (week + 1) % 7;
@@ -550,23 +562,23 @@ void output_calendar() {
 }
 
 void Select_Option(int& num) {
-    gotoxy(59, 1);
+    gotoxy(45, 2);
     cout << "[원하는 옵션 선택]";
-    gotoxy(60, 3);
+    gotoxy(46, 4);
     cout << "① 일정 관리(추가,변경,삭제,검색,확인) ";
-    gotoxy(60, 4);
+    gotoxy(46, 5);
     cout << "② 날짜 계산";
-    gotoxy(60, 5);
+    gotoxy(46, 6);
     cout << "③ 음력 변환";
-    gotoxy(60, 6);
+    gotoxy(46, 7);
     cout << "④ 달력날짜 변경";
-    gotoxy(60, 7);
+    gotoxy(46, 8);
     cout << "⑤ 올해 공휴일 확인";
-    gotoxy(60, 8);
+    gotoxy(46, 9);
     cout << "⑥ 종료 ";
-    gotoxy(60, 9);
+    gotoxy(46, 10);
     cout << endl;
-    gotoxy(60, 10); 
+    gotoxy(46, 11); 
     textcolor(2, 0);
     cout << "옵션 번호: ";
     cin >> num;
@@ -978,41 +990,41 @@ void schedule()
      openFile(user, &plan);//저장된 데이터를 불러오는 함수
      //메뉴 선택
      while (1){
-     	  gotoxy(59, 1);
+     	  gotoxy(45, 2);
           cout << "[일정 관리 옵션]" << endl;
-          gotoxy(60, 3);
+          gotoxy(46, 4);
           cout << "① 일정 추가" << endl;
-          gotoxy(60, 4);
+          gotoxy(46, 5);
           cout << "② 일정 삭제" << endl;
-          gotoxy(60, 5);
+          gotoxy(46, 6);
           cout << "③ 일정 검색" << endl; 
-          gotoxy(60, 6);
+          gotoxy(46, 7);
           cout << "④ 일정 확인" << endl;
-          gotoxy(60, 7);
+          gotoxy(46, 8);
           cout << "⑤ 저장하고 나가기" << endl;
-          gotoxy(60, 9);
+          gotoxy(46, 10);
           textcolor(2, 0);
           cout << "옵션 번호: ";
           cin >> input;
           textcolor(15, 0);
        if (input == 1){
        		   system("cls");
-               cout << endl << "[추가할 일정]" << endl << endl;
+               cout << endl << endl << " [추가할 일정]" << endl << endl;
                insert(user, &plan, year);
           }
           else if (input == 2){
           	   system("cls");
-               cout << endl << "[삭제할 일정]" << endl << endl;
+               cout << endl << endl << " [삭제할 일정]" << endl << endl;
                deleted(user, &plan);
           }
           else if (input == 3){
           	   system("cls");
-               cout << endl << "[일정 검색]" << endl << endl;
+               cout << endl << endl << " [일정 검색]" << endl << endl;
                search(user, &plan);
           }
           else if (input == 4){
           	   system("cls");
-               cout << endl << "[일정 확인]" << endl << endl;
+               cout << endl << endl << " [일정 확인]" << endl << endl;
                printAll(user, &plan);
           }
           else if (input == 5){
@@ -1023,7 +1035,7 @@ void schedule()
           else if(input > 5 || input < 1){
           	   system("cls");
           	   textcolor(12, 0);
-               cout << endl << endl << "다시 입력해주세요.";
+               cout << endl << endl << " 다시 입력해주세요.";
                textcolor(15, 0);
              }
          }
@@ -1095,18 +1107,18 @@ void insert(User* ptr, int* num, int year){
 
      //일정정보가 꽉 차지 않으면
      if (*num < MAX_NUM){
-          cout << "일정을 입력해주세요 : ";
+          cout << " 일정을 입력해주세요 : ";
           cin >> ptr[*num].name;
           itoa(year, ptr[*num].year, 10);
-          cout << "날짜를 입력해주세요 : ";
+          cout << " 날짜를 입력해주세요 : ";
           cin >> ptr[*num].day;
 
           (*num)++;
-          cout << endl << "일정이 추가되었습니다." << endl;
+          cout << endl << " 일정이 추가되었습니다." << endl;
      }
      //일정 정보가 꽉 차면
      else
-          cout << "일정이 꽉 찼습니다." << endl << "불필요한 일정을 제거해주십시오." << endl; 
+          cout << " 일정이 꽉 찼습니다." << endl << " 불필요한 일정을 제거해주십시오." << endl; 
     }
 //일정 정보를 삭제하는 함수
 int deleted(User* ptr, int* num){
@@ -1114,16 +1126,16 @@ int deleted(User* ptr, int* num){
      int i, j;
      //일정 정보가 한개라도 남아있으면
      if (*num > 0){
-          cout << "삭제하고자하는 일정을 입력해주세요 : ";
+          cout << " 삭제하고자하는 일정을 입력해주세요: " << endl << " ";
           cin >> name; 
           for (i = 0; i < MAX_NUM; i++){
            //문자열이므로 비교하기위해 strcmp사용
                if (strcmp(name, ptr[i].name) == 0){
 
                     (*num)--;
-                    cout << endl << "일정이 삭제되었습니다." << endl;
+                    cout << endl << " 일정이 삭제되었습니다." << endl;
                     textcolor(12, 0);
-					cout << "삭제된 일정: " << ptr[i].name;
+					cout << " 삭제된 일정: " << ptr[i].name;
 					textcolor(15, 0);
                     //데이터가 가득 차지 않았다면
                     if (i != MAX_NUM - 1){
@@ -1148,7 +1160,7 @@ int deleted(User* ptr, int* num){
                return 0;
                }
           }
-          cout << "찾지 못했습니다. \n\n";
+          cout << endl << " 찾지 못했습니다. \n\n";
           return 0;
      }
      //저장된 일정이 없다면
@@ -1163,20 +1175,20 @@ int search(User* ptr, int* num){
      int i;
      //저장된 데이터가 있다면
      if (*num > 0){
-          cout << "검색하고자 하는 일정을 입력해주세요 : ";
+          cout << " 검색하고자 하는 일정을 입력해주세요: " << endl << " ";
           cin >> name;
           for (i = 0; i < MAX_NUM; i++){
                //strcmp는 문자열이 일치할때 0을 반환
                //0은 C언어에서 거짓을 의미
                //그러므로 ! 을 붙여 참으로 변경하여 실행
                if (!strcmp(name, ptr[i].name)){
-                    cout << endl << "일정: " << ptr[i].name << endl;
-                    cout << "년도: " << ptr[i].year << endl;
-                    cout << "날짜: " << ptr[i].day << endl;
+                    cout << endl << " 일정: " << ptr[i].name << endl;
+                    cout << " 년도: " << ptr[i].year << endl;
+                    cout << " 날짜: " << ptr[i].day << endl << endl;
                     return 0;
                }
           }
-      cout << endl << "찾지 못했습니다." << endl;
+      cout << endl << " 찾지 못했습니다." << endl;
       return 0;
      }
      else{
@@ -1189,9 +1201,9 @@ void printAll(User* ptr, int* num){
      int i = 0;
      if (*num > 0){
           for (i = 0; i < *num; i++){
-               cout << "일정 : " << ptr[i].name << endl;
-               cout << "연도 : " << ptr[i].year << endl;
-               cout << "날짜 : " << ptr[i].day << endl;
+               cout << " 일정 : " << ptr[i].name << endl;
+               cout << " 연도 : " << ptr[i].year << endl;
+               cout << " 날짜 : " << ptr[i].day << endl << endl;
           }
      }
      else
@@ -1200,6 +1212,7 @@ void printAll(User* ptr, int* num){
 
 void holiday(int year)
 {
+	textcolor(12, 0);
 	solar_t solar1_1,solar4_8,solar8_15;
 	LunarToSolar(year,1,1,false,solar1_1);
 	LunarToSolar(year,4,8,false,solar4_8);
@@ -1216,6 +1229,7 @@ void holiday(int year)
 	{
 		cout << from_holiday_txt;
 		memset(from_holiday_txt,0,103);
+		textcolor(15, 0);
 	}
 	
 	gotoxy(1,29);

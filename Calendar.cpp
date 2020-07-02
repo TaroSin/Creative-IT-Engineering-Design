@@ -1224,7 +1224,6 @@ void holiday(int year)
 	fp = fopen("holiday.txt", "r");
 	
 	cout << "\n\n\n " << year;
-	
 	while(fgets(from_holiday_txt,103,fp)!=NULL)
 	{
 		cout << from_holiday_txt;

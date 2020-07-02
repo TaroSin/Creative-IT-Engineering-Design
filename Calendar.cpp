@@ -347,12 +347,16 @@ void input() {
 }
 
 int getweek(int year, int month) {
-    int week = year + (year / 4 - year / 100 + year / 400);
+	int lastyear=year-1;
+    int week1 = (lastyear*365) + (lastyear / 4) - (lastyear / 100) + (lastyear / 400);
 
     for (int i = 0; i < month - 1; i++)
-        week += Month_days[i];
-
-    return (week % 7);
+    {
+    	if(i==1)
+			Cal_leap();	
+        week1 += Month_days[i];
+	}
+    return (week1 % 7);
 }
 
 static void febdays(int y)  // 윤년 인자 받는 버전
@@ -369,8 +373,10 @@ static void febdays(int y)  // 윤년 인자 받는 버전
     lunar_Month_days[1] = 29;
 }
 void Cal_leap() {
-    if (month == 2 && ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0))
-        lunar_Month_days[1]++;
+    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)
+        Month_days[1] = 29;
+    else
+    	Month_days[1]=28;
 }
 
 void DayofYear::SetDday()
@@ -382,6 +388,7 @@ void DayofYear::SetDday()
     {
         system("cls");
         Cal_leap();
+        week = getweek(year, month);
         output_calendar();
         cout << "\n\n*************다시 입력해주세요.*************" << endl;
         cout << "\n\n날짜를 입력하시오 (월 일): ";
@@ -401,6 +408,7 @@ void DayofYear::SetToday()
     {
         system("cls");
         Cal_leap();
+        week = getweek(year, month);
         output_calendar();
         cout << "\n\n*************다시 입력해주세요.*************" << endl;
         cout << "\n\n기준이 될 날짜를 입력하세요 (월 일): ";
@@ -455,21 +463,24 @@ void DayofYear::ShowLeftDay()
 }
 
 void output_calendar() {
-	textcolor(15, 0);
-	cout << "  " << endl << "      [" << year << "년 " << month << "월]      " << endl << endl << "  " <<
+    textcolor(15, 0);
+    cout << "  " << endl << "      [" << year << "년 " << month << "월]      " << endl << endl << "  " <<
         "일 " << "월 " << "화 " << "수 " << "목 " << "금 " << "토  " << endl << endl << "  ";
-	
-    for (int i = 0; i < week; i++)
-        cout << "   ";
-	
+
+    for (int i = 0; i <= week; i++)
+    {
+    	if(week==6) break; 
+    	cout << "   ";
+    }
+
     for (int j = 1; j <= Month_days[month - 1]; j++)
     {
-    	if(week % 7 == 0) textcolor(12, 0); // 일요일은 숫자 색을 빨간색으로  
-    	else if(week % 7 == 6) textcolor(9, 0); // 토요일은 숫자 색을 파란색으로  
-    	else textcolor(15, 0);
+        if (week % 7 == 5) textcolor(9, 0); // 토요일은 숫자 색을 파으로  
+        else if (week % 7 == 6) textcolor(12, 0); // 일요일은 숫자 색을 빨색으로  
+        else textcolor(15, 0);
         printf("%2d ", j);
-        if (week % 7 == 6)
-            cout << "  " << endl << "  "; 
+        if ((week+1) % 7 == 6)
+            cout << "  " << endl << "  ";
         week = (week + 1) % 7;
     }
     cout << endl;
@@ -549,8 +560,8 @@ void Select_Option(int& num) {
         system("cls");
         input();
         system("cls");
-        week = getweek(year, month);
         Cal_leap();
+        week = getweek(year, month);
         output_calendar();
         Select_Option(num);
     }

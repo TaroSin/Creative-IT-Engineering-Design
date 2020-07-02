@@ -464,21 +464,34 @@ void DayofYear::ShowLeftDay()
 
 void output_calendar() {
     textcolor(15, 0);
-    cout << "  " << endl << "      [" << year << "년 " << month << "월]      " << endl << endl << "  " <<
-        "일 " << "월 " << "화 " << "수 " << "목 " << "금 " << "토  " << endl << endl << "  ";
+    cout << "  " << endl << endl << "            << " << year << " / " << month << " >>      " << endl << endl << "     ";
+    textcolor(0, 12);
+	cout << "SUN";
+	textcolor(0, 7);
+	cout << " MON " << "TUE " << "WED " << "THU " << "FRI ";
+	textcolor(0, 9);
+	cout << "SAT";
+	textcolor(15, 0);
+	cout << endl << endl;
+	
+	if(week %7 != 6) cout << "     ";
+	else cout << "  ";
 
     for (int i = 0; i <= week; i++)
     {
-    	if(week==6) break; 
-    	cout << "   ";
+       if(week==6) break; 
+       cout << "    ";
     }
 
     for (int j = 1; j <= Month_days[month - 1]; j++)
     {
-        if (week % 7 == 5) textcolor(9, 0); // 토요일은 숫자 색을 파으로  
-        else if (week % 7 == 6) textcolor(12, 0); // 일요일은 숫자 색을 빨색으로  
+        if (week % 7 == 5) textcolor(9, 0); // 토요일은 숫자 색을 파란색으로 
+        else if (week % 7 == 6) {
+			textcolor(12, 0); // 일요일은 숫자 색을 빨간색으로  
+			cout << "   ";
+		}
         else textcolor(15, 0);
-        printf("%2d ", j);
+        printf("%3d ", j);
         if ((week+1) % 7 == 6)
             cout << "  " << endl << "  ";
         week = (week + 1) % 7;
@@ -488,23 +501,23 @@ void output_calendar() {
 }
 
 void Select_Option(int& num) {
-    gotoxy(59, 1);
+    gotoxy(45, 2);
     cout << "[원하는 옵션 선택]";
-    gotoxy(60, 3);
+    gotoxy(46, 4);
     cout << "① 일정 관리(추가,변경,삭제,검색,확인) ";
-    gotoxy(60, 4);
+    gotoxy(46, 5);
     cout << "② 날짜 계산";
-    gotoxy(60, 5);
+    gotoxy(46, 6);
     cout << "③ 음력 변환";
-    gotoxy(60, 6);
+    gotoxy(46, 7);
     cout << "④ 달력날짜 변경";
-    gotoxy(60, 7);
+    gotoxy(46, 8);
     cout << "⑤ 올해 공휴일 확인";
-    gotoxy(60, 8);
+    gotoxy(46, 9);
     cout << "⑥ 종료 ";
-    gotoxy(60, 9);
+    gotoxy(46, 10);
     cout << endl;
-    gotoxy(60, 10); 
+    gotoxy(46, 11); 
     textcolor(2, 0);
     cout << "옵션 번호: ";
     cin >> num;
@@ -919,19 +932,19 @@ void schedule()
      openFile(user, &plan);//저장된 데이터를 불러오는 함수
      //메뉴 선택
      while (1){
-     	  gotoxy(59, 1);
+     	  gotoxy(45, 2);
           cout << "[일정 관리 옵션]" << endl;
-          gotoxy(60, 3);
+          gotoxy(46, 4);
           cout << "① 일정 추가" << endl;
-          gotoxy(60, 4);
+          gotoxy(46, 5);
           cout << "② 일정 삭제" << endl;
-          gotoxy(60, 5);
+          gotoxy(46, 6);
           cout << "③ 일정 검색" << endl; 
-          gotoxy(60, 6);
+          gotoxy(46, 7);
           cout << "④ 일정 확인" << endl;
-          gotoxy(60, 7);
+          gotoxy(46, 8);
           cout << "⑤ 저장하고 나가기" << endl;
-          gotoxy(60, 9);
+          gotoxy(46, 10);
           textcolor(2, 0);
           cout << "옵션 번호: ";
           cin >> input;

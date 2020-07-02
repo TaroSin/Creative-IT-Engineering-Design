@@ -1154,6 +1154,7 @@ void printAll(User* ptr, int* num){
 
 void holiday(int year)
 {
+	textcolor(12, 0);
 	solar_t solar1_1,solar4_8,solar8_15;
 	LunarToSolar(year,1,1,false,solar1_1);
 	LunarToSolar(year,4,8,false,solar4_8);
@@ -1170,6 +1171,7 @@ void holiday(int year)
 	{
 		cout << from_holiday_txt;
 		memset(from_holiday_txt,0,103);
+		textcolor(15, 0);
 	}
 	
 	gotoxy(1,29);

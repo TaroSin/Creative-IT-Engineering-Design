@@ -951,22 +951,22 @@ void schedule()
           textcolor(15, 0);
        if (input == 1){
        		   system("cls");
-               cout << endl << "[추가할 일정]" << endl << endl;
+               cout << endl << endl << " [추가할 일정]" << endl << endl;
                insert(user, &plan, year);
           }
           else if (input == 2){
           	   system("cls");
-               cout << endl << "[삭제할 일정]" << endl << endl;
+               cout << endl << endl << " [삭제할 일정]" << endl << endl;
                deleted(user, &plan);
           }
           else if (input == 3){
           	   system("cls");
-               cout << endl << "[일정 검색]" << endl << endl;
+               cout << endl << endl << " [일정 검색]" << endl << endl;
                search(user, &plan);
           }
           else if (input == 4){
           	   system("cls");
-               cout << endl << "[일정 확인]" << endl << endl;
+               cout << endl << endl << " [일정 확인]" << endl << endl;
                printAll(user, &plan);
           }
           else if (input == 5){
@@ -977,7 +977,7 @@ void schedule()
           else if(input > 5 || input < 1){
           	   system("cls");
           	   textcolor(12, 0);
-               cout << endl << endl << "다시 입력해주세요.";
+               cout << endl << endl << " 다시 입력해주세요.";
                textcolor(15, 0);
              }
          }
@@ -1049,18 +1049,18 @@ void insert(User* ptr, int* num, int year){
 
      //일정정보가 꽉 차지 않으면
      if (*num < MAX_NUM){
-          cout << "일정을 입력해주세요 : ";
+          cout << " 일정을 입력해주세요 : ";
           cin >> ptr[*num].name;
           itoa(year, ptr[*num].year, 10);
-          cout << "날짜를 입력해주세요 : ";
+          cout << " 날짜를 입력해주세요 : ";
           cin >> ptr[*num].day;
 
           (*num)++;
-          cout << endl << "일정이 추가되었습니다." << endl;
+          cout << endl << " 일정이 추가되었습니다." << endl;
      }
      //일정 정보가 꽉 차면
      else
-          cout << "일정이 꽉 찼습니다." << endl << "불필요한 일정을 제거해주십시오." << endl; 
+          cout << " 일정이 꽉 찼습니다." << endl << " 불필요한 일정을 제거해주십시오." << endl; 
     }
 //일정 정보를 삭제하는 함수
 int deleted(User* ptr, int* num){
@@ -1068,16 +1068,16 @@ int deleted(User* ptr, int* num){
      int i, j;
      //일정 정보가 한개라도 남아있으면
      if (*num > 0){
-          cout << "삭제하고자하는 일정을 입력해주세요 : ";
+          cout << " 삭제하고자하는 일정을 입력해주세요: " << endl << " ";
           cin >> name; 
           for (i = 0; i < MAX_NUM; i++){
            //문자열이므로 비교하기위해 strcmp사용
                if (strcmp(name, ptr[i].name) == 0){
 
                     (*num)--;
-                    cout << endl << "일정이 삭제되었습니다." << endl;
+                    cout << endl << " 일정이 삭제되었습니다." << endl;
                     textcolor(12, 0);
-					cout << "삭제된 일정: " << ptr[i].name;
+					cout << " 삭제된 일정: " << ptr[i].name;
 					textcolor(15, 0);
                     //데이터가 가득 차지 않았다면
                     if (i != MAX_NUM - 1){
@@ -1102,7 +1102,7 @@ int deleted(User* ptr, int* num){
                return 0;
                }
           }
-          cout << "찾지 못했습니다. \n\n";
+          cout << endl << " 찾지 못했습니다. \n\n";
           return 0;
      }
      //저장된 일정이 없다면
@@ -1117,20 +1117,20 @@ int search(User* ptr, int* num){
      int i;
      //저장된 데이터가 있다면
      if (*num > 0){
-          cout << "검색하고자 하는 일정을 입력해주세요 : ";
+          cout << " 검색하고자 하는 일정을 입력해주세요: " << endl << " ";
           cin >> name;
           for (i = 0; i < MAX_NUM; i++){
                //strcmp는 문자열이 일치할때 0을 반환
                //0은 C언어에서 거짓을 의미
                //그러므로 ! 을 붙여 참으로 변경하여 실행
                if (!strcmp(name, ptr[i].name)){
-                    cout << endl << "일정: " << ptr[i].name << endl;
-                    cout << "년도: " << ptr[i].year << endl;
-                    cout << "날짜: " << ptr[i].day << endl;
+                    cout << endl << " 일정: " << ptr[i].name << endl;
+                    cout << " 년도: " << ptr[i].year << endl;
+                    cout << " 날짜: " << ptr[i].day << endl << endl;
                     return 0;
                }
           }
-      cout << endl << "찾지 못했습니다." << endl;
+      cout << endl << " 찾지 못했습니다." << endl;
       return 0;
      }
      else{
@@ -1143,9 +1143,9 @@ void printAll(User* ptr, int* num){
      int i = 0;
      if (*num > 0){
           for (i = 0; i < *num; i++){
-               cout << "일정 : " << ptr[i].name << endl;
-               cout << "연도 : " << ptr[i].year << endl;
-               cout << "날짜 : " << ptr[i].day << endl;
+               cout << " 일정 : " << ptr[i].name << endl;
+               cout << " 연도 : " << ptr[i].year << endl;
+               cout << " 날짜 : " << ptr[i].day << endl << endl;
           }
      }
      else

@@ -338,11 +338,11 @@ int main()
 
 void input() {
 	textcolor(9,0);
-	cout << endl << "출력을 원하는 달력의 연도와 월을 입력하세요." << endl << endl;
+	cout << endl << " 출력을 원하는 달력의 연도와 월을 입력하세요." << endl << endl;
 	textcolor(15, 0);
-    cout << "년: ";
+    cout << " 년: ";
     cin >> year;
-    cout << "월: ";
+    cout << " 월: ";
     cin >> month;
 }
 
@@ -381,7 +381,7 @@ void Cal_leap() {
 
 void DayofYear::SetDday()
 {
-    cout << "\n\n날짜를 입력하시오 (월 일): ";
+    cout << "\n 날짜를 입력하시오 (월 일): ";
     int m, d;
     cin >> m >> d;
     while (m < 1 || m>12 || d < 1 || Month_days[m - 1] < d)
@@ -391,7 +391,7 @@ void DayofYear::SetDday()
         week = getweek(year, month);
         output_calendar();
         cout << "\n\n*************다시 입력해주세요.*************" << endl;
-        cout << "\n\n날짜를 입력하시오 (월 일): ";
+        cout << "\n 날짜를 입력하시오 (월 일): ";
         cin >> m >> d;
     }
 
@@ -401,7 +401,7 @@ void DayofYear::SetDday()
 
 void DayofYear::SetToday()
 {
-    cout << "\n\n기준이 될 날짜를 입력하세요 (월 일): ";
+    cout << "\n\n\n 기준이 될 날짜를 입력하세요 (월 일): ";
     int tm, td;
     cin >> tm >> td;
     while (tm < 1 || tm>12 || td < 1 || Month_days[tm - 1] < td)
@@ -411,7 +411,7 @@ void DayofYear::SetToday()
         week = getweek(year, month);
         output_calendar();
         cout << "\n\n*************다시 입력해주세요.*************" << endl;
-        cout << "\n\n기준이 될 날짜를 입력하세요 (월 일): ";
+        cout << "\n\n\n 기준이 될 날짜를 입력하세요 (월 일): ";
         cin >> tm >> td;
     }
 
@@ -458,9 +458,8 @@ void DayofYear::ShowLeftDay()
         return;
     }
 
-
-    cout << "\n\nD-day " << left << endl;
-}
+    cout << "\n\n D-day " << left << endl;
+} 
 
 void output_calendar() {
     textcolor(15, 0);

@@ -303,6 +303,8 @@ void gotoxy(int x, int y);
 bool SolarToLunar(lunar_t& lunar); // 양력 -> 음력
 bool LunarToSolar(int Year, int Month, int Day, bool Leaf, solar_t& solar);
 void holiday(int year);
+void dday();
+void openHoliDay(int year);
 
 class DayofYear
 {
@@ -313,6 +315,7 @@ private:
     int t_day;
 public:
     void SetDday();
+    void SetDdayHoliy(int year);
     void SetToday();
     int GetPastDay(int m, int d);
     int GetLeftDay();
@@ -398,7 +401,66 @@ void DayofYear::SetDday()
     d_mon = m;
     d_day = d;
 }
+void DayofYear::SetDdayHoliy(int year)
+{
+	char from_holiday_txt[103];
+	FILE* fp;
+    
+	solar_t solar1_1, solar4_8, solar8_15;
+    LunarToSolar(year, 1, 1, false, solar1_1);
+    LunarToSolar(year, 4, 8, false, solar4_8);
+    LunarToSolar(year, 8, 15, false, solar8_15);
+	int hm, hd;
+	cout << "\n\n공휴일을 입력하세요 (월 일): ";
+	cin >> hm >> hd;
+	
+    while (!((hm==1&&hd==1)||(hm==3&&hd==1)||(hm==5&&hd==5)||(hm==6&&hd==6)||(hm==8&&hd==15)||
+	(hm==10&&hd==3)||(hm==10&&hd==9)||(hm==12&&hd==25)||(hm==solar1_1.month&&hd==solar1_1.day)||
+	(hm==solar4_8.month&&hd==solar4_8.day)||(hm==solar8_15.month&&hd==solar8_15.day)))
+    	{
+    		system("cls");
+    		
+			fp = fopen("holiday.txt", "r");
+    		
+    		cout << "\n\n " << year;
+    		while (fgets(from_holiday_txt, 103, fp) != NULL)
+    		{
+        		cout << from_holiday_txt;
+        		memset(from_holiday_txt, 0, 103);
+    		}
 
+			fclose(fp);
+
+			gotoxy(1, 17);
+    		cout << "설날";
+    		gotoxy(1, 18);
+    		cout << (int)solar1_1.month << "/" << (int)solar1_1.day << endl;
+    		gotoxy(14, 17);
+    		cout << "석가탄신일";
+    		gotoxy(14, 18);
+   			cout << (int)solar4_8.month << "/" << (int)solar4_8.day << endl;
+    		gotoxy(30, 17);
+    		cout << "추석";
+    		gotoxy(30, 18);
+    		cout << (int)solar8_15.month << "/" << (int)solar8_15.day << endl;
+    	
+    		if(hm < 1 || hm>12 || hd < 1 || Month_days[hm - 1] < hd)
+    		{
+    			cout << "\n\n*************범위를 벗어났습니다.*************" << endl;
+        		cout << "\n*************다시 입력해주세요.*************" << endl;
+        		cout << "\n\n공휴일을 입력하세요 (월 일): ";
+        		cin >> hm >> hd;
+        		return;
+			}
+			
+    		cout << "\n\n*************공휴일이 아닙니다.*************" << endl;
+        	cout << "\n*************다시 입력해주세요.*************" << endl;
+        	cout << "\n\n공휴일을 입력하세요 (월 일): ";
+        	cin >> hm >> hd;
+		}
+	d_mon = hm;
+    d_day = hd;
+}
 void DayofYear::SetToday()
 {
     cout << "\n\n기준이 될 날짜를 입력하세요 (월 일): ";
@@ -529,14 +591,11 @@ void Select_Option(int& num) {
         Cal_leap();
         week = getweek(year, month);
         output_calendar();
-
-        DayofYear dy;
-
-        dy.SetToday();
-
-        dy.SetDday();
-
-        dy.ShowLeftDay();
+        dday();
+        system("cls");
+        Cal_leap();
+        week = getweek(year, month);
+        output_calendar();
         Select_Option(num);
     }
     else if (num == 3)
@@ -1173,4 +1232,92 @@ void holiday(int year)
 	cout << (int)solar8_15.month << "/" << (int)solar8_15.day << endl;
 	
 	fclose(fp);
+}
+
+void dday()
+{
+    int input;
+    User user[MAX_NUM]; //일정 정보를 저장할 구조체 배열
+    int plan = 0; //저장된 일정수
+    openFile(user, &plan);//저장된 데이터를 불러오는 함수
+    //메뉴 선택
+    while (1) {
+        gotoxy(59, 1);
+        cout << "[날짜 계산]" << endl;
+        gotoxy(60, 3);
+        cout << "① 공휴일 D-day " << endl;
+        gotoxy(60, 4);
+        cout << "② D-day " << endl;
+        gotoxy(60, 5);
+        cout << "③ 나가기 " << endl;
+        gotoxy(60, 9);
+        textcolor(2, 0);
+        cout << "옵션 번호: ";
+        cin >> input;
+        textcolor(15, 0);
+
+        if (input == 1) {
+            system("cls");
+            openHoliDay(year);
+            
+        }
+        else if (input == 2) {
+            system("cls");
+            DayofYear dy;
+            dy.SetToday();
+            dy.SetDday();
+            dy.ShowLeftDay();
+        }
+        else if (input == 3) {
+            system("cls");
+            break;
+        }
+        else 
+        {
+            system("cls");
+            textcolor(12, 0);
+            cout << endl << endl << "다시 입력해주세요.";
+            textcolor(15, 0);
+        }
+    }
+}
+void openHoliDay(int year) {
+    char from_holiday_txt[103];
+    DayofYear day;
+    
+    solar_t solar1_1, solar4_8, solar8_15;
+    LunarToSolar(year, 1, 1, false, solar1_1);
+    LunarToSolar(year, 4, 8, false, solar4_8);
+    LunarToSolar(year, 8, 15, false, solar8_15);
+    
+    FILE* fp;
+    fp = fopen("holiday.txt", "r");
+ 
+    cout << "\n\n " << year;
+    while (fgets(from_holiday_txt, 103, fp) != NULL)
+    {
+        cout << from_holiday_txt;
+        memset(from_holiday_txt, 0, 103);
+    }
+
+	fclose(fp);
+
+	gotoxy(1, 17);
+    cout << "설날";
+    gotoxy(1, 18);
+    cout << (int)solar1_1.month << "/" << (int)solar1_1.day << endl;
+    gotoxy(14, 17);
+    cout << "석가탄신일";
+    gotoxy(14, 18);
+    cout << (int)solar4_8.month << "/" << (int)solar4_8.day << endl;
+    gotoxy(30, 17);
+    cout << "추석";
+    gotoxy(30, 18);
+    cout << (int)solar8_15.month << "/" << (int)solar8_15.day << endl;
+    
+	day.SetDdayHoliy(year);
+    day.SetToday();
+    day.ShowLeftDay();
+
+    return ;
 }

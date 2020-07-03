@@ -20,7 +20,13 @@
 #### Using program language : C++14
 #### Using compiler : Visual Studio 2019
 
---------------------------------------------------  
+# Screenshots
+--------------
+<div>
+<img width="400" src="https://user-images.githubusercontent.com/63631037/86430454-49597980-bd2d-11ea-961f-1925368a1058.png">
+ </div>
+
+
 # Project Rule
 #### (1)master Branch는 배포이력을 관리하기 위해 사용, develop Branch는 기능 개발을 위한 브랜치들을 병합하기 위해 사용
 #### (2)모든 기능이 추가되고 버그가 수정되어 배포 가능한 안정적인 상태라면 Develop브랜치를 master 브랜치에 병합(merge) 
